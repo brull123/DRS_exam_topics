@@ -1,5 +1,4 @@
 # Dynamics and Control of Networks - Exam questions
-
 ## Additional defined commands
 
 ### TODO box
@@ -26,6 +25,9 @@ There is a makefile for compiling the whole project, but if you want to compile 
 ```shell
 make
 ```
+
+> [!NOTE]
+> During the first make or after cleaning auxilliary files, you need to run make 3 times to properly display Contents and page numbers
 
 ### Cleaning auxilliary files
 
