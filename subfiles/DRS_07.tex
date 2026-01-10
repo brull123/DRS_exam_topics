@@ -1,0 +1,44 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\section{Define assortative mixing with respect to scalar characteristics. Explain how does it differ from that for enumerative characteristics.}
+Assortatively mixed networks will have high in-degree nodes well connected to each other-comprising the network's core. The remaining
+low in-degree nodes are poorly connected to each other but usually connected to the core via some path.
+
+Dissortatively mixed networks usually consist of high-degree hubs weakly connected to each other but each connecting into many low in-degree nodes.
+TODO
+
+\subsection{Scalar characteristics}
+The assortative coefficient is defined as
+\begin{align}
+	r & = \frac{\sum_{i,j} \left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}{\sum_{i,j} \left(d_i \delta_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}
+\end{align}
+
+\section{Define the modularity matrix for undirected networks.}
+\begin{align}
+	B_{i,j} & = A_{i,j} - \frac{d_i d_j}{2m.}
+\end{align}
+
+\section{Explain assortative mixing with respect to the degree. Discuss what are its implications on the network topology.}
+Assortatively mixed networks will have high in-degree nodes well connected to each other-comprising the network's core. The remaining
+low in-degree nodes are poorly connected to each other but usually connected to the core via some path.
+
+Dissortatively mixed networks usually consist of high-degree hubs weakly connected to each other but each connecting into many low in-degree nodes.
+
+
+% \section{Define the power law distributions, explain how to calculate their moments.}
+\section{Explain the effect of top heavy distribution of vertex degrees for the networks.}
+A minor proportion of highly connected vertices accounts for a sizeable portion of the graph edges.\\
+Such networks are remarkably robust to random node failure, but extremely susceptible to targeted attacks.
+
+\section{Explain the importance of the small world effect for the functionality of computer networks.}
+\begin{definition}{Small world networks}{}
+	\begin{itemize}
+		\item It is an example of a regular graph - each vertex connects to an even number $c$ of symmetrically placed immediate neighbors
+		\item The diameter scales as $\log n$
+	\end{itemize}
+
+\end{definition}
+\TODO{Not complete}
+\end{document}

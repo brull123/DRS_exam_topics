@@ -1,0 +1,35 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\section{Explain the concept of algorithm complexity. Define the O notation.}
+$O(n)$ expresses the leading order of duration for the worst possible case as a function of the input size $n$.\\
+Algorithms of complexity $O(n^3)$ and higher are hardly practical and would be unfeasible even for a few thousand nodes.\\
+One should aim at $O(\log n) \leq O(n) \leq O(n \log n) \leq O(n^2) \leq O(n^2 \log n)$.
+
+\section{Explain how the network topology is represented in computer memory. Compare the adjacency matrix and the adjacency list.}
+\begin{itemize}
+	\item Adjacency matrix
+	\item Adjacency list
+	\item Adjacency tree
+	\item Hybrid representation
+	\item Heap
+\end{itemize}
+\subsection{Adjacency matrix}
+Requires a lot of space for storing zeros, especially for a sparse graph.
+
+\subsection{Adjacency list}
+Nodes point to their neighbors. Decreases storage size requirements. \\
+It lists a vertex and its outgoing edges or incoming edges
+
+
+\section{Define the tree data structure. What is a balanced tree and what is the worst case complexity of finding an element in it?}
+Binary tree - each entry in this data structure haas none, one or two children entries\\
+Stores lists of neighbors of a given vertex\\
+Finding a specific entry takes at worst $O(k)$ where $k$ is the depth of the tree. For a balanced tree the complexity is $O(\log k)$
+
+% \section{Explain how trees are used to represent networks.}
+\section{Define a binary heap. Why would one use such a structure in network algorithms?}
+Each entry consists of a label and a value, this value is less than any of its children. Uses dynamic memory allocation.
+Adding a node has complexity $O(\log k)$. Removing the entry with the smallest value is $O(1)$.
+\end{document}

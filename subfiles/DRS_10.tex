@@ -1,0 +1,90 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+% \section{Describe the power method for finding leading eigenvalues and eigenvectors. What is the importance of choosing the initial seed?}
+% \section{Explain how to efficiently find all eigenvalues and eigenvectors of a given matrix. Specify which algorithms are used for matrix transformation and efficient solution of the transformed eigen-problem, given different starting matrices (symmetric/asymmetric, sparse/dense).}
+\section{Why to use heuristic algorithms in general, even if no proof of correctness is available?}
+Heuristic algorithms return a result which is not guaranteed to be best fo all cases, but for most practical purposes it is often good enough. It returns a fairly good divisions - approximate but acceptable solutions - no proof of validity is available\\
+We use heuristic algorithms, when it comes to computationally difficult problems  - either the algorithm runs fast but fails to find the best solution almost always, or it always finds the best solution but takes prohibitively long time to return the result\\
+Characteristically for heuristic algorithms, this assertion is not rigorously proven, hence it remains a conjecture, albeit one that points directly to the presumed fundamental difference between P and NP type problems
+
+\section{What is the difference between the graph partitioning and the community detection problems?}
+\subsection{Graph partitioning}
+In graph partitioning, we are dividing graph vertices into a given number of non-overlapping groups of a fixed size. Number of inter-group edges is minimized.
+Motivated by task allocation in distributed computing. Applications in network process simulations on parallel computers
+\subsection{Community detection}
+Number and sizes of groups are not given but are result of an algorithm. It is primarily used as a tool for analysis and understanding network data. The criterion of division can be defined in various ways, through the extent of modularity.
+Reveals hidden structures in a network.
+
+\section{Describe the Kernighan-Lin algorithm for graph partitioning. What is its computational complexity? What is roughly the size of the network for which it can be reasonably expected to work?}
+\begin{enumerate}
+	\item Divide vertices into 2 groups $V_1$ and $V_2$ of required sizes $n_1,\:n_2$ in any way
+	\item For all pairs $i,j \in V_1, V_2$ calculate the change in cut set size between the groups if the vertices are interchanged
+	\item From all such pairs find the one $(i,j)*$ that reduces the cut set size the most, or in absence of any such, the one that increases the cut size the least
+	\item Swap the pair - this preserves assigned sizes of both groups
+	\item Repeat the process from step 2 with the exception that the moved pairs cannot be moved again in this round
+	\item Stop when there are no more pairs to swap
+	\item When all swaps are completed - select from all partitions the one with the smallest cut set
+	\item Repeat the whole process with this partition. Stop when there is no improvement
+\end{enumerate}
+\subsection{Complexity}
+\begin{itemize}
+	\item Number of swaps in each round is $\min(n_1, n_2) \in [0, \frac{n}{2}]$ resulting in $O(n)$ in the worst case
+	\item For each swap the amount of pairs is $\frac{n^2}{2}$ in the worst case resulting in $O(n^2)$
+	\item For each examined swap the reduction in cut set size is calculated $O(\frac{m}{n})$
+	\item The total complexity for one round is $O(mn^2)$ which is $O(n^3)$ on sparse networks and $O(n^4)$ on dense networks
+	\item It is applicable for $n\leq 10^3$
+\end{itemize}
+
+\section{Describe the spectral partitioning algorithm. Explain the importance of the graph Laplacian matrix and its Fiedler eigenvalue. What is its computational complexity? What is roughly the size of a network for which it can be reasonably expected to work?}
+\begin{itemize}
+	\item Spectral graph partitioning is a method for graph bipartition
+	\item It is based on the graph Laplacian
+	\item Assumes an undirected graph
+	\item The sizes of the 2 clusters are given
+	\item The cut set size equals
+	      \begin{align}
+		      R & = \frac{1}{2} \sum_{i,j} A_{ij}
+	      \end{align}
+\end{itemize}
+\begin{enumerate}
+	\item Define a vector $s \in \R^n$ with components $s_i$
+	      \begin{align}
+		      s_i & =
+		      \begin{cases}
+			      +1 \:\text{if}\: i \in V_1 \\
+			      -1 \:\text{if}\: i \in V_2 \\
+		      \end{cases}
+	      \end{align}
+	\item With the help of $s_i$ vertex labels one can construct the expression
+	      \begin{align}
+		      \frac{1}{2}(1 - s_i s_j) & =
+		      \begin{cases}
+			      1 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
+			      0 \:\text{if} \:(i,j) \:\text{vertices are in the same group}
+		      \end{cases}
+	      \end{align}
+	\item We can then express the size of the cut set as
+	      \begin{align}
+		      R                      & = \frac{1}{2} \sum_{i,j = 1}^{n} A_{ij}\frac{1}{2}(1-s_i s_j) = \frac{1}{4} \sum_{i,j=1}{n} A_{ij}(1-s_i s_j) \\
+		      \sum_{i,j=1}^{n}A_{ij} & = \sum_{i=1}^{n}d_i = \sum_{i=1}^{n}d_i s_i^2 = \sum_{i=1}^{n}d_i \delta_{ij} s_i s_j                         \\
+		      R                      & = \frac{1}{4} \sum_{i=1}^{n} (d_i \delta_{ij} - A_{ij}) s_i s_j = \frac{1}{4} \sum_{i=1}^{n} L_{ij} s_i s_j   \\
+		      R                      & = \frac{1}{4} s^T L s
+	      \end{align}
+\end{enumerate}
+\subsection{Spectral Partitioning Algorithm}
+\begin{enumerate}
+	\item Calculate the Fiedler eigenvector $v \in \R^n$ of $L$
+	\item Sort the elements $v_2i$ from largest to smallest
+	\item Assign $n_1$ most positive elements to $V_1$ and the remaining elements to $V_2$
+	\item Assign $n_1$ most negative elements to $V_1$ and the remaining elements to $V_2$
+	\item Identify which partition results in smaller cut set size
+\end{enumerate}
+\subsection{Complexity}
+\begin{itemize}
+	\item Finding the Fiedler eigenvector can be done with $O(mn)$
+	\item It is applicable for $n\leq 10^5$
+	\item The smaller is the Fielder eigenvalue, the easier it is to partition a network
+\end{itemize}
+\end{document}

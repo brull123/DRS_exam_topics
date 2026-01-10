@@ -1,0 +1,116 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\section{Describe the variant Kernighan-Lin algorithm for community detection. What is its complexity? How does it compare to the original Kernighan-Lin algorithm for graph partitioning?}
+A heauristic algorithm.\\
+Divides the network into 2 clusters of vertices. Calculate the change of modularity when moving a vertex to the other group.
+In each iteration choose the vertex which minimizes the Modularity the most.
+
+Overall complexity $O(nm)$, $n$ vertices. The original has $O(n^2m)$.
+
+\section{Describe the spectral modularity maximization method of community detection. Explain the importance of the modularity matrix and its leading eigenvector.}
+\begin{align}
+	Q               & = \frac{1}{2m} \sum_{i,j} A_{ij} - \frac{d_i d_j}{2m} \delta (c_i, c_j) = \frac{1}{2m} \sum_{i,j} B_{i,j} \delta(c_i, c_j) \\
+	\text{2 communities} \: c_i \pm 1                                                                                                            \\
+	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_i}{2m}\sum_{j} d_j = 0                                                                         \\
+	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_j}{2m}\sum_{i} d_i = d_j^{out} - d_j^{in}                                                      \\
+\end{align}
+\begin{align}
+	\frac{1}{2} (1+ c_i c_j) & =
+	\begin{cases}
+		1 ,\quad sgn(x_i) = sgn(c_j) \\
+		0
+	\end{cases}
+\end{align}
+\begin{align}
+	Q & = \frac{1}{4m}c^T B c
+\end{align}
+
+\section{How does repeated bisection work for modularity maximization? Compare it with the same approach in graph partitioning.}
+\subsection{Modularity maximization}
+\begin{enumerate}
+	\item Divide vertices $V$ arbitrarily into two disjoint groups $V_1$ and $V_2$
+	\item Consider each vertex and calculate the change in modularity if it were to be moved to the other group
+	\item Identify a single vertex the movement of which increases the modularity the most or decreases the least. Move that vertex
+	\item Repeat the process from step 2 but a vertex moved already must not be moved again
+	\item Stop when there are no more vertices to consider
+	\item Go through all partitions and select the one with the maximal modularity
+	\item Start another round with this partition
+	\item Repeat until there are no more improvements
+\end{enumerate}
+
+\begin{itemize}
+	\item The algorithm does not swap pairs but move individual vertices
+	\item Since the algorithm does not need to consider pairs, the complexity is reduced to $O(nm)$ compared to $O(n^2m)$ of the original KL algorithm for graph partitioning
+\end{itemize}
+
+\section{Briefly describe simulated annealing, genetic algorithm and greedy algorithm for modularity maximization.}
+\subsection{Simulated annealing}
+Lower uncertainty slowly, the solution should converge
+\subsection{Genetic algorithm}
+Successive generations and fitness function which cuts off worse older generations
+\subsection{Greedy algorithm}
+Starts from individual nodes. Joins them together so that modularity is maximized.\\
+In the next step it joins the communities from previous step.\\
+Ends when the whole graph is a single community. Checks all intermediate states and finds the one with the largest modularity.\\
+Only algorithm the sort of works on very large networks $O(n \log^2n)$.
+
+
+\section{Describe the algorithm using betweenness centrality for community detection. How does the Radicci algorithm differ from it?}
+Betweenness is measure how many shortest path between edges go through a node.\\
+In each step remove the edge with a largest betweenness centrality. Recalculate betweenness centrality.\\
+
+Complexity  $O(mn^2 + nm^2)$. On a sparse graph $O(n^3)$
+
+Radicci modification finds if an edge is a part of a short loop (4 edges). Works well if the graph has a lot of short loops (social networks). Technical networks usually avoid short loops.
+
+Ends only after avery single vertex is separated. It is up to us to choose which division has maximal Modularity.
+
+\section{Explain how the agglomerative algorithms proceed in community detection.}
+\begin{itemize}
+	\item Agglomerative algorithm starts with individual vertices and joins them into ever greater communities.
+	\item An divisive method does the opposite.
+	\item The algorithm requires a definition of a measure of similarity of groups of vertices
+	      \begin{itemize}
+		      \item First define similarity for pairs of vertices
+		      \item Then generalize this measure for groups - maximal between any, minimal between any, average, etc.
+	      \end{itemize}
+\end{itemize}
+
+\section{Define hierarchical clustering. What is a dendrogram? Explain the similarity-based hierarchical clustering with single-, complete- and average-linkage clustering.}
+dendogram - tree like structure
+Ends only after avery single vertex is separated. It is up to us to choose which division has maximal Modularity.
+
+Start with vertices. Connect the vertices that are most similar. Generalize the similarity to similarity between clusters
+\begin{itemize}
+	\item minimal similarity of 2 vertices each in one cluster
+	\item maximum similarity
+	\item average similarity
+\end{itemize}
+\begin{align}
+	\bar{a}_1     & = \frac{1}{n_1} \sum a_i                                          \\
+	\bar{a}_2     & = \frac{1}{n_2} \sum a_i                                          \\
+	\bar{a}_{1,2} & = \frac{1}{n_1 + n_2} \left(n_1 \bar{a}_1 + n_2 \bar{a}_2 \right)
+\end{align}
+
+Complexity $O(n^2 \log n)$
+
+The result is usually tightly knit core and separate peripherals.
+
+\section{Comment on which of the algorithms detect a fixed number vs. an unspecified number of communities.}
+\subsection{Specified}
+\begin{itemize}
+	\item Kernihan-lin algorithm for modularity maximization
+	\item Spectral Modularity maximization
+\end{itemize}
+\subsection{Unspecified}
+\begin{itemize}
+	\item Simulated annealing
+	\item Genetic algorithm
+	\item Greedy algorithm
+	\item Hierarchical clustering
+\end{itemize}
+\TODO{This needs to be checked and reworked}
+
+\end{document}

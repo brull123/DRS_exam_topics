@@ -1,0 +1,175 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\TODO{Lecture 14}
+\section{Define the consensus/synchronization problem in states and outputs. Explain the difference between homogeneous and heterogeneous agents.}
+\begin{definition}{Consensus/synchronization problem}{}
+	The goal is to reach a state or output consensus
+	\begin{align}
+		||x_i - x_j|| & \rightarrow 0, \: {\rm for}\: t\rightarrow \infty, \:{\rm or} \\
+		||y_i - y_j|| & \rightarrow 0, \: {\rm for}\: t\rightarrow \infty.
+	\end{align}
+	In case of leader following the problem is defined as
+	\begin{align}
+		||x_i - x_0|| & \rightarrow 0, \: {\rm for}\: t\rightarrow \infty, \: {\rm or} \\
+		||y_i - y_0|| & \rightarrow 0, \: {\rm for}\: t\rightarrow \infty,
+	\end{align}
+	where the leader is uncontrolled
+	\begin{align}
+		\dot{x}_0 & = A x_0 \\
+		y_0       & = C x_0
+	\end{align}
+\end{definition}
+
+\begin{definition}{Agents}{}
+	Agents are autonomous subsystems, with dynamics having a state description generally in $\R^n$ - $x_i \in \R^n, \: i = 1,\dots, N$.
+	Agents are assumed to have local computation and communication capabilities.
+\end{definition}
+\subsection{Homogeneous agents}
+The control problem for an multi-agent system is asymptotic state synchronization
+\begin{align}
+	||x_i - x_j|| \rightarrow 0, \: \forall (i, j) \: {\rm as} \: t \rightarrow \infty
+\end{align}
+
+\subsection{Heterogeneous agents}
+Heterogeneous agents assume that systems of individual agents may differ from each other, their states may differ in dimensions and therefore state synchronization
+problem cannot be posed. Instead, the control goal is asymptotic synchronization of outputs.\\
+\begin{align}
+	||y_i - y_j|| \rightarrow 0, \: \forall (i, j) \: {\rm as} \: t \rightarrow \infty
+\end{align}
+
+\section{Write the single-integrator leaderless consensus dynamics in continuous time. How to include a leader?}
+The single-integrator agents have a dynamic model
+\begin{align}
+	\dot{x}_i = u_i,
+\end{align}
+with local neighborhood error in the states for control,
+\begin{align}
+	u_i & = \sum_{j} e_{ij}(x_j - x_i),
+\end{align}
+which is available to each single-agent in a distributed way. This results in a closed-loop system
+\begin{align}
+	\dot{x}_i & = \sum_j e_{ij}(x_j - x_i) \rightarrow \dot{x} = -Lx \\
+	x         & = \begin{bmatrix}
+		              x_1 & x_2 & \dots & x_N
+	              \end{bmatrix}^T
+\end{align}
+\subsection{Leader}
+A leader is an uncontrolled agent
+\begin{align}
+	\dot{x}_0 & = A x_0  \\
+	y_0       & = C x_0.
+\end{align}
+
+The control of other agents is augmented with
+\begin{align}
+	          & g_i(x_0 - x_i)                                                         \\
+	\dot{x}_i & = A x_i + BK \left[\sum_j e_{ij} (x_j - x_i) + g_i (x_0 - x_i)\right].
+\end{align}
+
+\TODO{Missing addition of a leader}
+
+\section{Write the single-integrator leaderless consensus dynamics in discrete time. How to include a leader?}
+In discrete time the model of a single agent is
+\begin{align}
+	x_i(k+1) & = u_(k).
+\end{align}
+Cooperative local neighborhood signal for control is
+\begin{align}
+	u_i(k) & = \frac{1}{1+d_i} \left[\sum_j e_{ij}(x_j(k) - x_i(k))\right] \\
+	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right].
+\end{align}
+In compact notation the closed loop system is
+\begin{align}
+	x(k+1) & = (I + D)^{-1} (I + E)x(k)
+\end{align}
+\TODO{Check}
+
+\section{Set up the dynamical equations for continuous-time homogeneous LTI agents using local neighborhood error signal for state synchronization.}
+A single agent has dynamics
+\begin{align}
+	\dot{x}_i & = A x_i + B u_i \\
+	y_i       & = C x_i.
+\end{align}
+We assume there is a leader present
+\begin{align}
+	\dot{x}_0 & = Ax_0 \\
+	y_0       & = Cx_0 \\
+	u_0 = 0.
+\end{align}
+Then the goal is $||x_i - x_0|| \rightarrow 0$.
+
+The distributed control is
+\begin{align}
+	u_i       & = cK\left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right]           \\
+	\dot{x}_i & = Ax_i + cBK \left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right],
+\end{align}
+where $c > 0$ is a scalar gain.
+
+In vector notation that is
+\begin{align}
+	\bm{x}            & =
+	\begin{bmatrix}
+		x_1    \\
+		\vdots \\
+		x_N    \\
+	\end{bmatrix} \in \R^{nN}, \: x_i \in R^n                                                                           \\
+	\bm{u}            & =
+	\begin{bmatrix}
+		u_1    \\
+		\vdots \\
+		u_N
+	\end{bmatrix} \in \R^{mN}, \: u_i \in R^m                                                                           \\
+	\bm{u}            & =
+	\begin{cases}
+		- L \otimes K \bm{x}\: \text{for swarming} \\
+		- (L+G) \otimes K (\bm{x} - \bm{1} \otimes x_0)\: \text{for leader following}
+	\end{cases}                                        \\
+	\bm{\dot{x}}      & = \left[(I_N \otimes A) - c L \otimes BK\right] \bm{x}                                          \\
+	\bm{\dot{\delta}} & = \left[(I_N \otimes A) - c (L+G) \otimes BK\right] \bm{\delta}, \: \text{for leader following}
+\end{align}
+The total system dynamic matrix has size $\R^{mN \times nN}$.
+
+We are looking for a transformation $T$
+\begin{align}
+	T^{-1} L T & = \Lambda,
+\end{align}
+where $\Lambda$ is triangular.
+\begin{align}
+	(T^{-1} \otimes I_n) (I_N \otimes A - c L \otimes B K)(T \otimes I_n) \\
+	T^{-1}T \otimes A - c T^{-1} L T \otimes B K                          \\
+	I_n \otimes A - c\Lambda  \otimes B K                                 \\
+	\text{On the diagonal of the matrix are blocks of} \: A - c \Lambda_{ii} B K \in \R^{n\times n}
+\end{align}
+Now we can analyze $N$ matrices of lower dimensionality then before. The eigenvalues of the blocks are the eigenvalues of the whole matrix.\\
+The diagonal elements of $\Lambda$ are the eigenvalues of the graph Laplacian. One is zero and the other ones have non-negative real part.
+The matrices on the block diagonal are $A - c \lambda_i B K \in \mathbb{C}^{n \times n}$.
+Now we analyze the matrix pencil
+\begin{align}
+	A -  \sigma B K, \sigma \in \mathbb{C}.
+\end{align}
+For which $\sigma$ is the matrix asymptotically stable. These create the synchronizing region.
+If we find a coupling gain $c$ such that all graph matrix eigenvalues end up in a synchronizing region, we can guarantee synchronization of a multi agent system using the feedback gain $K$\\
+We require $(A,B)$ stabilizeable, $(A-BK)$ asymptotically stable for $\sigma = 1$.
+
+\subsection{Lyapunov analysis}
+\begin{align}
+	V(z)                                                         = z ^{\dagger} P z, \: P & = P^T > 0    \\
+	z ^{\dagger} [P (A - \sigma B K) + (A - \sigma B K)^{\dagger} P]z                     & = \dot{V}(z)
+\end{align}
+
+\section{Show how to use complex matrix pencils for investigating state synchronization of homogeneous agents.}
+If eigenvalues of $L + G$ are such that all these diagonal blocks are stable, then the entire system is stable in a sense that it asymptotically reaches synchronization to the leader's trajectory.
+The stability of the total system is determined by stability of diagonal blocks,
+\begin{align}
+	A - c \lambda_j L B K.
+\end{align}
+
+Given $(A,B)$, for a chosen feedback matrix $K$ find a guaranteed region in the complex plane $\sigma \in \mathbb{C}$, such that the complex matrix pencil $(A - \sigma B K)$ is stable - results in the synchronizing region.\\
+Then find the coupling gain $c > 0$ that pushes all the eigenvalues $\lambda_j(L + G)$ into that region.
+
+\section{Show that with the distributed feedback gain designed from the single-agent Algebraic Riccati Equation the resulting synchronizing region is an unbounded left-hand half-plane in the complex plane.}
+Using Lyapunov analysis of stability
+% \section{What are the necessary topological conditions on the communication graph for consensus or synchronization? Explain the dynamical role of the Fiedler eigenvalue in continuous time single integrator consensus.}
+\end{document}

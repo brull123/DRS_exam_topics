@@ -1,0 +1,77 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+\section{Define a binary relation and establish a connection with its graph.}
+A binary relation $R$ is a subset of $V \times V$ - a Cartesian square of set $V - R \subseteq V \times V$\\
+Classical graphs depict binary relations - nodes represent elements of $V$, edges signify pairs of elements in a given binary relation.
+
+\section{Tell the difference between a graph and a hyper-graph. Depict a given hyper-graph by a bipartite network.}
+A \textbf{hypergraph} $HG(V,E)$ is a pair of disjoint sets $V$ and $E$, where the elements of $E$ are non-empty subsets of $V$ having arbitrary cardinality.\\
+Hypergraphs can represent general relations, as can bipartite graphs.\\[10px]
+A graph $G(V,E)$ is called a \textbf{bipartite} graph if its vertex set $V$ can be partitioned into two disjoint classes $V_1, V_2$, where $V_1 \cap V_2 = \emptyset$ and $V_1 \cup V_2 = V$, so that
+all edges of $G$ have exactly one vertex in $V_1$ and exactly one $V_2$.\\[10px]
+A graph is bipartite, if and only if it does not contain an odd cycle.\\[10px]
+\textbf{Affiliation} graphs, as bipartite graphs, have two sets of distinct vertices. Vertices of one type, signifying the original elements of $V$,
+are affiliated with vertices of the other type, signifying classes of elements in $V$.
+\begin{align}
+	HG(V,W,E), \: E \subseteq V \times W,
+\end{align}
+where elements of the edge set $E$ are ordered couples $(i,j) \in E, i \in V, j \in W$, signifying that the element $i$ belong to the class $j$.\\
+Membership of vertices to classes is indicated by the \textbf{vertex class incidence matrix} $B\in \R^{|V|\times |W|}$
+\begin{align}
+	B_{ij} & =
+	\begin{cases}
+		0 \\
+		1, \: \text{if vertex $j$ belongs to the group $i$}
+	\end{cases}
+\end{align}
+
+\section{Explain the difference between a multi-graph and a simple graph.}
+A simple graph allows no multi-edges, no self-loops
+
+\section{Define the graph adjacency matrix.}
+The adjacency matrix $A \in \R ^{n \times n}$ is defined as
+\begin{align}
+	A_{ij} & =
+	\begin{cases}
+		 & 1 \: \text{if $(i,j) \in E$}    \\
+		 & 0 \: \text{if $(i,j) \notin E$}
+	\end{cases}
+\end{align}
+nonzero elements do not need to be unity, but they are usually positive.\\
+Unweighted graphs have binary adjacency matrices and weighted graphs have nonnegative adjacency matrices.
+
+\section{Compare the co-citation and bibliographic coupling.}
+\subsection{Co-citation}
+\begin{align}
+	C_{ij} & = \sum_{k} A_{ik} A_{jk} - \text{number of vertices to which both the $i^{\rm th}$ and the $j^{\rm th}$ vertices point}
+\end{align}
+\subsection{Bibliographic coupling}
+\begin{align}
+	B_{ij} & = \sum_{k} A_{ki} A_{ki} - \text{number of vertices which point both to the $i^{\rm th}$ and the $j^{\rm th}$ vertices}
+\end{align}
+
+\section{Explain the two one-mode projections of a bipartite network.}
+\begin{align}
+	P_{ij} & = \sum_{k} B_{ki}B{kj}, \quad P = B^T B,
+\end{align}
+where $P_{ij}$ give the number of classes vertices $i$ and $j$ both belong to, with $P_{ii}$ being the number of classes which vertex $i$ alone belongs to.\\
+Alternatively
+\begin{align}
+	P'_{ij} & = \sum_{k} B_{ik}B_{jk}, \quad P' = B B^T,
+\end{align}
+where $P'_{ij}$  gives the number of vertices that belong both to classes $i$ and $j$, with $P'_{ii}$ being the number of vertices
+that belong to class $i$.
+
+\section{Define planar networks and state the `four color' theorem.}
+Planar network has a graph that can be drawn in a plane without any of its edges intersecting. Not all drawings of the graph need to have non intersecting edges but there needs to exist at least one.\\
+For a planar graph the maximal number of colors required to accomplish vertex coloring, with no adjacent nodes having the same color, is 4.
+
+\section{Explain the difference between a sparse and a dense network.}
+The mean degree of a network is defined as
+\begin{align}
+	c & = \frac{1}{N}\sum_{i=1}^{N} d_i
+\end{align}
+A network is sparse if for $n \rightarrow \infty$ the mean degree is bounded $c < \infty$, otherwise the network is sparse.
+
+\end{document}

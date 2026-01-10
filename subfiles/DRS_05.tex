@@ -1,0 +1,96 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+\section{Define PageRank and modified PageRank.}
+\begin{definition}{Page Rank}{}
+	Modified version of Katz centrality - normalized by its out-degree. Nodes pointing out to many other nodes have their importance proportionally discounted.
+	\begin{align}
+		x_i     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta     \\
+		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bar{\beta} \\
+		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
+	\end{align}
+\end{definition}
+\section{Explain hubs and authorities and their relation to co-citation and bibliographic coupling.}
+\begin{definition}{Authories and Hubs}{}
+	An important authority has a lot of useful Hubs pointing to it.
+	\begin{align}
+		x_i & = \alpha \sum_{j} A_{ij} y_j
+	\end{align}
+	A useful Hub points to a lot of important Authorities.
+	\begin{align}
+		y_i & = \beta \sum_{j} A_{ij}x_j
+	\end{align}
+\end{definition}
+\subsection{Closeness centrality}
+\section{Define closeness centrality and discuss different variants thereof.}
+\begin{definition}{Closeness centrality}{}
+	Closeness centrality defines the importance of a node in a graph as being measured by how close it is to all other nodes in the graph.
+	It is a local path-based measure
+	\begin{align}
+		l_i & = \frac{1}{n}\sum_j d_{ij},
+	\end{align}
+	where $d_{ij}$ is the geodesic distance between the pair of vertices $(i,j)$.
+	Alternatively $ l_i = \frac{1}{n-1}\sum_j d_{ij} $ to exclude the origin vertex under consideration from the total count.\\
+	The values of this measure have a small range, therefore its inverse is more numerically meaningful
+	\begin{align}
+		c_i & = \frac{1}{l_i} = \frac{n}{\sum_j d_{ij}}.
+	\end{align}
+	The closeness centrality is often redefined as
+	\begin{align}
+		c_i' & = \frac{1}{n-1} \sum_{j\neq i}\frac{1}{d_{ij}}
+	\end{align}
+\end{definition}
+\section{Define betweenness centrality.}
+\begin{definition}{Betweenness centrality}{}
+	Betweenness centrality measures the importance of a node in a graph based upon how many times it occurs in the shortest path between all pairs
+	of nodes in a graph.
+	\begin{align}
+		x_i & = \sum_{s,t}n^i_{st},
+	\end{align}
+	where $n_st^i = 1$ if vertex $i$ lies in the geodesic path between vertices $s$ and $t$, and 0 otherwise.\\
+	If we define the total number of geodesic paths between vertices $s$ and $t$ as $g_{st}$, we can modify the definition of betweenness centrality as
+	\begin{align}
+		x_i & = \sum_{s,t}\frac{n^i_{st}}{g_{st}},
+	\end{align}
+\end{definition}
+\section{Explain the difference between cliques, plexes and cores.}
+\subsection{Clique}
+\begin{definition}{Clique of size $n$}
+	A clique of size $n$ is a maximal set of $n$ verices in an undirected graph such that all its members are connected to all its other members via single edges.
+	Every 2 vertices in a clique are adjacent.
+\end{definition}
+\subsection{k-plex}
+\begin{definition}{$k$-plex}
+	A $k$-plex (if size $n$) is a maximal subset of $n$ vertices such that each one member is connected to at least $n-k$ others in that subset.
+\end{definition}
+\subsection{k-core}
+\begin{definition}{$k$-core}{}
+	A $k$-core (of size $n$) is a maximal subset of $n$ vertices such that each one member is connected to at least $k$ others in that subset
+	\begin{itemize}
+		\item $k$-core = ($n-k$)-plex
+	\end{itemize}
+\end{definition}
+\subsection{Independent subset}
+\begin{definition}{Independent subset}{}
+	A subset of vertices is termed independent if any pair of its elements are not adjacent.
+\end{definition}
+\subsection{Coclique}
+\begin{definition}{Coclique}{}
+	A coclique (of size $n$) is a set of $n$ vertices no two of which are adjacent. A coclique is an independent, stable, subset of graph vertices.\\
+	A maximum coclique is a maximal independent set, the cardinality of which is the graph independence number. A subset of graph vertices is independent, if and only
+	if those same vertices comprise a clique in the graph complement.
+\end{definition}
+\subsection{k-clique}
+\begin{definition}{$k$-clique}{}
+	A $k$-clique is a maximal set of vertices such that each member is no more than $k$ edges away from any other member.
+\end{definition}
+\subsection{Component}
+\begin{definition}{Component}{}
+	A subset of graph vertices where each 2 vertices are connected by a path
+\end{definition}
+\subsection{k-component}
+\begin{definition}{$k$-component}{}
+	A subset of graph vertices where each 2 vertices are connected via at least $k$ vertex independent paths - paths with no common vertex other than start and end
+\end{definition}
+% \section{Define k-components and compare them with connected components.}
+\end{document}

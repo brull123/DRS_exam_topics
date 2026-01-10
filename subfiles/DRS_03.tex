@@ -1,0 +1,86 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+\section{Define a path and explain the difference between an Eulerian and a Hamiltonian path.}
+\subsection{Eulerian path}
+An Eulerian path is a path visiting each edge in a graph only once.\\
+Each Eulerian path must leave a vertex it enters, except of the starting and ending vertex, therefore there must be 0 or exactly 2 vertices with an odd degree.
+\subsection{Hamiltonian path}
+A Hamiltonian path is a path visiting each vertex in the graph only once.\\
+It is necessarily self-avoiding. Finding of such path is more difficult than finding of a Eulerian path.
+\section{State the min-cut max-flow theorem.}
+Maximal flow equals the cardinality of the minimum edge cut set times the maximal throughput.\\
+If each edge carries unit flow then the maximal flow between a given pair of vertices equals the edge connectivity of those two vertices.
+\section{Define the graph Laplacian matrix and its relation to diffusion processes on graphs.}
+Given the conventional nonnegative adjacency matrix of a graph $A \in \R^{n \times n}$,
+the \textbf{graph Laplacian matrix} $L \in \R^{n \times n}$ is defined as
+\begin{align}
+	L & = D - A,
+\end{align}
+where $D = {\rm diag}(d_1, \dots, d_n) \geq 0$ is a non-negative diagonal matrix of vertex in-degrees.\\
+Similarly, the out-Laplacian is defined using vertex out-degrees and the transposed Adjacency matrix.\\
+The sign-less graph Laplacian matrix $Q \in \R^{n \times n}$ is defined as
+\begin{align}
+	Q & = D + A.
+\end{align}
+By construction $L \bar{1}_n = 0$, therefore 0 is always an eigenvalue of the Laplacian matrix and the Laplacian matrix is always singular.
+The sign-less Laplacian $Q$ does not share this property.\\
+The zero eigenvalue fo the graph Laplacian may be simple or multiple, depending on the graph topology.
+\section{State the Geršgorin disc theorem and explain how it is applied to the graph Laplacian.}
+Let $A = (a_{ij})$ be an $n \times n$ complex matrix. For each row $i$, define the Geršgorin disc
+\begin{align}
+	D_i = \{\, z \in \mathbb{C} : |z - a_{ii}| \le R_i \,\},
+\end{align}
+where
+\begin{align}
+	R_i = \sum_{j \ne i} |a_{ij}|.
+\end{align}
+
+Then every eigenvalue of $A$ lies in the union of these discs:
+\begin{align}
+	\sigma(A) \subseteq \bigcup_{i=1}^n D_i.
+\end{align}
+
+Moreover, if the union of $k$ of these discs is disjoint from all the others, then that union contains exactly $k$ eigenvalues of $A$, counted with algebraic multiplicity.\\
+
+The center of each disc is a value on the diagonal of the Laplacian. The diagonal values of the adjacency matrix $A$ are
+zero $a_{ii} = 0$, and every element of the degree matrix $D$ is nonnegative $D_{ii} \geq 0$, therefore the diagonal values of the Laplacian matrix are $L_{ii} \geq 0$.
+This means that all of the centers of the discs lie in the right half-plane.\\
+Furthermore, each row sum without the diagonal element $\sum_{j\neq i} |a_{ij}|$ is exactly the degree of the vertex $d_i = D_{ii}$.\\
+This means that each disc has a center in the  right half-plane and the disc is tangent to the imaginary axis.
+The discs boundaries intersect in 0.\\
+The Laplacian is therefore always positive semi-definite.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 0.75 \linewidth]{Figures/Figure_1.pdf}
+	\caption{Geršorin disc theorem applied to the graph Laplacian}
+\end{figure}
+
+
+\section{Define the Fiedler eigenvalue and explain its significance for the graph topology.}
+
+\section{Define the Frobenius form of the graph Laplacian and explain how it reveals the graph topology.}
+There exists a permutation of the vertex labels that results in a block triangular Laplacian matrix. The permutation
+is performed using an orthogonal transformation matrix $T, \: T^{-1}=T^T$.
+\begin{align}
+	T^T L T & =
+	\begin{bmatrix}
+		L_{11} & \dots  & L_{1k} & L_{1(k+1)}     & \dots  & L_{1p} \\
+		0      & \ddots & \vdots & \vdots         & \vdots          \\
+		0      & 0      & L_{kk} & L_{k(k+1)}     & \dots  & L_{kp} \\[5px]
+		0      & 0      & 0      & L_{(k+1)(k+1)} & \dots  & 0      \\
+		0      & 0      & 0      & 0              & \ddots & 0      \\[5px]
+		0      & 0      & 0      & 0              & 0      & L_{pp}
+	\end{bmatrix},
+\end{align}
+The Frobenius form shows that
+\begin{itemize}
+	\item Strongly connected graph is sufficient for zero to be a simple eigenvalue of the graph Laplacian
+	\item Existence of a spanning tree is necessary and sufficient for zero to be a simple eigenvalue, this zero eigenvalue stems from the root
+	      irreducible component
+	\item In general case of a spanning forest, the multiplicity of zero eigenvalue equals the minimum number of trees which together span all vertices
+\end{itemize}
+If zero is a simple eigenvalue of $L$, the Fiedler eigenvalue is smallest non-zero eigenvalue. The value of the Fiedler eigenvalue
+is proportional to the overall graph connectivity.
+\end{document}

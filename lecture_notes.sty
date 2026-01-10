@@ -1,0 +1,128 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lecture_notes}[2025/10/13 Lecture notes formatting]
+
+%--- Encoding & fonts
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+
+%--- Layout & spacing
+\RequirePackage[a4paper,margin=1in]{geometry}
+% \RequirePackage{parskip} % Commented out to avoid option clash
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+%--- Math
+\RequirePackage{amsmath,amssymb,amsthm}
+\numberwithin{equation}{section}
+
+%--- Lists & graphics
+\RequirePackage{enumitem}
+\RequirePackage{graphicx}
+
+%--- Color & boxes
+\RequirePackage[most]{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\RequirePackage{xcolor}
+\definecolor{brand}{RGB}{33, 99, 255}
+
+%--- Hyperlinks
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=brand,
+  urlcolor=brand,
+  citecolor=brand
+}
+
+%--- Header / footer
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{} % clear
+\lhead{\textit{\coursename}}
+\chead{\textit{\lecturetitle}}
+\rhead{\textit{\lecturedate}}
+\lfoot{\notetaker}
+\rfoot{\thepage/\pageref{LastPage}}
+
+%--- Metadata (defaults; override in your .tex or via \setlecture)
+\providecommand{\coursename}{Course Name}
+\providecommand{\lecturetitle}{Lecture Title}
+\providecommand{\lecturenumber}{1}
+\providecommand{\lecturedate}{\today}
+\providecommand{\lecturer}{Prof. Someone}
+\providecommand{\notetaker}{Your Name}
+\newcommand{\setlecture}[6]{%
+  \renewcommand{\coursename}{#1}%
+  \renewcommand{\lecturetitle}{#2\ (\##3)}%
+  \renewcommand{\lecturedate}{#4}%
+  \renewcommand{\lecturer}{#5}%
+  \renewcommand{\notetaker}{#6}%
+}
+
+%--- Handy macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\given}{\,\middle|\,}
+
+%--- Margin cue
+\newcommand{\margincue}[1]{\marginpar{\raggedright\footnotesize\color{brand}#1}}
+
+%--- Theorem-like boxes
+\newtcbtheorem[number within=section]{theorem}{Theorem}%
+{enhanced, breakable, colback=white, colframe=black!50, fonttitle=\bfseries\color{black},
+ attach boxed title to top left, boxed title style={colback=black!5}}{th}
+
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}%
+{enhanced, breakable, colback=white, colframe=black!50, fonttitle=\bfseries\color{black},
+ attach boxed title to top left, boxed title style={colback=black!5}}{lem}
+
+% NOTE: heading text set to strict black here
+\newtcbtheorem[use counter from=theorem]{definition}{Definition}%
+{enhanced, breakable, colback=brand!2, colframe=brand!60!black,
+ fonttitle=\bfseries\color{black},
+ attach boxed title to top left, boxed title style={colback=brand!10}}{def}
+
+\newtcbtheorem[use counter from=theorem]{example}{Example}%
+{enhanced, breakable, colback=black!1, colframe=black!40, fonttitle=\bfseries\color{black},
+ attach boxed title to top left, boxed title style={colback=black!5}}{ex}
+
+% Note / Warning / Formula / Summary boxes
+\newtcolorbox{notebox}{enhanced, breakable, colback=brand!2, colframe=brand!60!black, title=\textbf{Note}}
+\newtcolorbox{warningbox}{enhanced, breakable, colback=yellow!10, colframe=yellow!40!black, title=\textbf{Warning}}
+\newtcolorbox{todobox}{enhanced, breakable, colback=orange!25, colframe=orange!50!red, title=\textbf{TODO}}
+\newtcolorbox{formulabox}{enhanced, breakable, colback=black!1, colframe=black!60, title=\textbf{Key Formula}}
+\newtcolorbox{summarybox}{enhanced, breakable, colback=green!5, colframe=green!50!black, title=\textbf{Summary}}
+
+%--- Checklist
+\newenvironment{checklist}{%
+  \begin{itemize}[left=0pt,label=\raisebox{0.2ex}{\tiny$\square$}, itemsep=0.3em]
+}{\end{itemize}}
+
+\newcommand{\TODO}[1]{\begin{todobox}#1\end{todobox}}
+
+%--- Section styling
+\RequirePackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
+
+%--- Title block
+\makeatletter
+\def\mynotesmaketitle{%
+  \begin{center}
+    {\LARGE \textbf{\coursename}}\\[0.25em]
+    {\large \lecturetitle}\\
+    \vspace{0.3em}
+    \normalsize Lecturer: \lecturer \quad|\quad Note-taker: \notetaker \quad|\quad Date: \lecturedate
+  \end{center}
+  \vspace{0.5em}\hrule\vspace{1em}
+}
+\makeatother

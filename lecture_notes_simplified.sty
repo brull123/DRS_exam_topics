@@ -1,0 +1,58 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lecture_notes_simplified}[2026/01/03 Simplified lecture notes formatting]
+
+% Load the original style
+\RequirePackage{lecture_notes}
+
+% --- Simplify the metadata behaviour ---------------------------------
+% Original \setlecture added the lecture number into the title and
+% stores lecturer, note taker, date. We redefine it so that
+% \lecturetitle is JUST the lecture name (argument #2).
+
+\renewcommand{\setlecture}[6]{%
+  \renewcommand{\coursename}{#1}% course name
+  \renewcommand{\lecturetitle}{#2}% JUST the lecture title, no "(#3)"
+  \renewcommand{\lecturedate}{#4}% still stored (unused visually)
+  \renewcommand{\lecturer}{#5}% kept in case you need it elsewhere
+  \renewcommand{\notetaker}{#6}% kept in case you need it elsewhere
+}
+
+% --- Simplify the title block ----------------------------------------
+% Use only course name + lecture title, no lecturer, number, note taker, date.
+
+\makeatletter
+\def\mynotesmaketitle{%
+  \begin{center}
+    {\LARGE \textbf{\coursename}}\\[0.25em]
+    {\large \lecturetitle}\\
+  \end{center}
+  \vspace{0.5em}
+  % \hrule\vspace{1em}
+}
+\makeatother
+
+% --- Simplify header and footer --------------------------------------
+% Header and footer contain ONLY the lecture name (lecture title).
+% (No lecturer, no lecture number, no note taker, no date.)
+
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}% clear everything
+
+% Put lecture title in the header (choose one of these layouts)
+% \chead{\lecturetitle}  % centered lecture name
+% If you prefer left/right, you could instead do:
+\lhead{\coursename}
+\rhead{\lecturetitle}
+
+% Footer completely empty to satisfy “only have the lecture name”
+% (i.e., no page numbers, no other text).
+\lfoot{}
+\cfoot{}
+% \rfoot{}
+\rfoot{\thepage/\pageref{LastPage}}
+
+
+% Keep a header rule; no footer rule.
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0pt}

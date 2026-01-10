@@ -1,0 +1,91 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\section{Describe the breadth-first search algorithm.}
+BFS is used for finding the shortest distance between a pair of nodes. The shortest distance is a nonlocal property.
+
+\begin{itemize}
+	\item In a single run for a given vertex the algorithm returns the shortest distance to all other vertices in the same connected component
+	\item There exists no other procedure to calculate the shortest distances between a given pair of vertices in the same connected component faster in the worst case
+	\item The algorithm also return the geodesic path
+\end{itemize}
+
+\subsection{The algorithm}
+\begin{enumerate}
+	\item Given a starting vertex $s$ - the distance to $s$ is 0, the distances to other vertices are unknown
+	\item All neighbors of $s$ are given a distance of 1
+	\item All of their neighbors are assigned distance of 2 if they have not been assigned a distance before
+	\item Repeat until there are no unvisited vertices
+\end{enumerate}
+
+\section{Explain the computational complexity of the naive implementation of the breadth-first search.}
+\begin{itemize}
+	\item Uses an array of vertex distances and distance counter $d$. At each step finds vertices of distance $d$ and look for their neighbors, update the distances which are presently unknown
+	\item Maximal number of iterations is $r$ - which is limited by the diameter of the graph
+	\item Updating distances has complexity $O(rn)$
+	\item Finding neighbors of distance $d$ in an adjacency has complexity $O(m/n)$. For all vertices it is $O(m \times n/n) = O(m)$
+	\item The total complexity is $O(rn + m)$. In worst case $r = n$. In small world $r \sim \log n$ which give $O(n\log n + m)$
+\end{itemize}
+
+\section{Explain the computational complexity of the more sophisticated implementation of the breadth-first search using a buffer.}
+Using a FIFO buffer (Queue) data structure, we only store vertices at distance $d+1$ we reduce the complexity of finding vertices at distance $d$
+\begin{itemize}
+	\item To set up the distance array $O(n)$
+	\item Find neighbors - average neighbors of a single vertex = $O(m/n)$ - in total $O(m)$
+	\item Total complexity $O(n+m)$
+	\item On a sparse network $m \sim n$ results in $O(n)$
+	\item On a dense network $m \sim n^2$ - $O(n^2)$
+\end{itemize}
+
+\section{Describe how to find the actual shortest paths. Assume first single shortest paths, then generalize to possible multiple shortest paths.}
+\begin{itemize}
+	\item Construct a directed network representing the shortest paths
+	\item Start by creating a new graph having the same number of vertices with the same labels and 0 edges
+	\item Start BFS for $s$. Each time a neighboring vertex $j \in N_i$ is examined add an edge $(j,i)$ which results in a path leading to $s$. Adding the edge has complexity $O(1)$ in an adjacency list
+	\item $O(n+m)$
+	\item For multiple paths an efficient implementation has complexity $O(n\log n + m)$
+\end{itemize}
+
+\section{Describe Dijkstra's algorithm, explain why it works and analyze its computational complexity.}
+\begin{itemize}
+	\item Uses an array of $n$ elements to contain current weighted distance estimates from a given starting node $s$
+	\item Estimates an upper bound on the shortest weighted distance - if the estimate is true then it must equal the actual shortest weighted distance
+	\item Distance estimate of the node $s$ from the node $s$ is initialized to 0 all others are set to infinity
+	\item Another array records if one is certain that a particular distance to the given vertex is indeed the smallest possible initially all are set to False
+\end{itemize}
+\begin{enumerate}
+	\item Find a vertex $v\in V$ that has the smallest weighted distance estimate from $s$. This estimate does not need to be certain at this point
+	\item Set it to certain
+	\item Calculate distance estimates from $s \rightarrow v \rightarrow i \forall i \in N_v$. If any of these is smaller than the current estimate for that neighbor, replace the old estimate with the newer one.
+	\item Repeat from step 1 until all distances are certain
+\end{enumerate}
+\subsection{Complexity}
+\begin{itemize}
+	\item $O(n)$ for search of vertices
+	\item Distance estimate add $O(m/n)$ for a single iteration
+	\item In the worst case the algorithm needs $n$ iterations - total complexity $O(n^2 + m)$
+	\item Implementation with a heap gives $O((m+n)\log n)$
+\end{itemize}
+
+\section{Explain how to apply Dijkstra's algorithm to find the actual least weight path tree for a given starting vertex.}
+\begin{itemize}
+	\item Maintains a shortest path tree
+	\item Adds an edge each time an estimate distance less than infinity is assigned
+	\item Move the edge to point to a different vertex each time one finds an estimate lower than the current one
+	\item The last edge position gives the true shortest path
+	\item If two successive estimates are equal add two directed edges implying alternative paths
+\end{itemize}
+
+\section{Explain how to find the betweenness centrality of a given vertex using either the breadth-first search or Dijkstra's algorithm.}
+To find the betweenness centrality of a vertex $v$
+for every distinct pair of vertices $s, t$ find the shortest path and check how many of these contain $v$
+
+\section{Describe the augmenting path algorithm (Ford-Fulkerson algorithm).}
+\begin{itemize}
+	\item Each edge carries a single unit of flow
+	\item Find a path $s \rightarrow t$ using BFS, each of the used edges are used and cannot carry more flow
+	\item Find other paths $s \rightarrow t$ using only the remaining edges
+	\item Repeat
+\end{itemize}
+\end{document}

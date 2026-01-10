@@ -1,0 +1,71 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+\section{Define the Metzler matrix.}
+Metzler matrix is a matrix, where all off-diagonal components are nonnegative, $M_ij \geq 0, \: i \neq j$.
+A dynamical system modelled by a Metzler matrix  $\dot{x} = Mx$ has its dynamical trajectories contained in the positive orthant $\R^n_{+}$, if the initial values are from the orthant.\\
+The matrix can be written as
+\begin{align}
+	 & M = -sI + A,\: \text{where}   \\
+	 & s\in \R, s\geq 0, A\succeq 0.
+\end{align}
+\section{Define the M-matrix.}
+The Z-matrix has all off-diagonal elements non-positive, $Z_{ij} \leq 0, \: i \neq j$.\\
+$-Z$ is Metzler.
+
+A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
+\begin{itemize}
+	\item A Z-matrix $E = sI - A$ is singular M-matrix if all its principal minors are nonnegative
+	\item A Z-matrix $E = sI - A$ is nonsingular M-matrix if all its principal minors are positive
+	\item If $E$ is a singular M-matrix, then $s\geq \rho(A)$ and $-E$ is a Metzler matrix
+	\item $\dots$
+\end{itemize}
+
+
+% \section{Explain how the geometric multiplicity of eigenvalues differ from the algebraic one.}
+\section{Explain the meaning of the geometric multiplicity of a zero eigenvalue for graph Laplacians.}
+By construction, the Laplacian matrix always has at least one zero eigenvalue. The amount of zero eigenvalues of the graph Laplacian is the amount of spanning trees in the spanning forest of the graph = number of strongly connected components of the graph.
+% \section{Define the left zero eigenvector.}
+
+\section{Define a balanced graph.}
+A balanced graph is a graph where the indegree and outdegree of each vertex are equal. An example of a balanced graph is an undirected graph.
+
+\section{Define a strongly connected graph.}
+A strongly connected graph is a graph where there exists a directed path between any 2 vertices of the graph.
+
+\section{Define the degree centrality.}
+Degree centrality is a measure of the graph.
+\begin{align}
+	d_i & = \sum_j A_{ij} = A \bm{1}
+\end{align}
+
+\section{Motivate the eigenvector centrality.}
+\begin{definition}{Eigenvector centrality}{}
+	Eigenvector centrality measures the importance of a node as a function of the importance of its neighbors. If a node is connected to
+	highly important nodes, it will have a higher eigenvector centrality compared to the less important nodes.
+	\begin{align}
+		x_i - x_i' & = \sum_{j} A_{ij} x_j \\
+		x'         & = A x,
+	\end{align}
+	where $x'$ is the eigenvector centrality of the neighbors.\\
+	The algorithm of obtaining the eigenvector centrality of a graph is iterative.\\
+	\begin{itemize}
+		\item Choose an initial seed $x(0) = c^T V$, where $V$ is the matrix of eigenvectors of the adjacency matrix and $c$ is a weighing vector.
+		\item Iterate
+		      \begin{align}
+			      x_i' & = \frac{1}{\lambda_1}\sum_j A_{ij} x_j,
+		      \end{align}
+		      where $\lambda_1$ is the maximal eigenvalue, the division is done to prevent blow-up or convergence to zero.
+	\end{itemize}
+\end{definition}
+
+\section{Explain the difference between the eigenvector centrality and the Katz centrality.}
+\begin{definition}{Katz centrality}{}
+	Generalization of the eigenvector centrality
+	\begin{align}
+		x_i         & = \alpha \sum_j A_{ij} x_j + \beta             \\
+		x           & = \left(I - \alpha A\right)^{-1} + \bar{\beta} \\
+		\bar{\beta} & = \bm{1}\beta
+	\end{align}
+\end{definition}
+\end{document}

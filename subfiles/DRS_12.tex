@@ -1,0 +1,133 @@
+\documentclass[../exam_questions.tex]{subfiles}
+
+\begin{document}
+
+\section{Explain the difference between site and bond percolation.}
+Percolations are stochastic processes. We distinguish between site and bond percolations which correspond to random removal of vertices or edges from a graph.
+\begin{itemize}
+	\item Site percolation - vertices together with all their pertaining edges, are removed from the graph randomly with probability $p$
+	\item Bond percolation - edges are removed from the network randomly with probability $p$
+\end{itemize}
+We observe how is the network affected.
+\begin{itemize}
+	\item Phase transition - network transitions abruptly from being connected to being a set of disconnected components. The transition happens for some probability $p$
+\end{itemize}
+Percolations are used for modelling the spread of forest fires, spread of epidemics in a network.
+
+
+\section{Describe uniform and non-uniform vertex removal. Comment on the robustness of power law networks to vertex removal.}
+A modification of the usual model removes the vertices non-uniformly, for example by their degrees - $p_d$ is a probability that a vertex of degree $d$ is removed.
+
+Power law configuration model is found to be remarkably resilient to random uniform removal of vertices but far more susceptible to specific targeted attacks. Removal of a small fraction of
+highest-degree vertices can be extremely detrimental - attacking a hub.
+
+\section{Describe a few examples of fully mixed epidemics models, e.g. SI, SIR, SIS, SEIR.}
+Used for purposes of mathematical description of epidemics.
+\subsection{SI}
+\begin{itemize}
+	\item Divides the population into two groups susceptible of size $S$ and infected of size $X$. The fraction of the total population is denoted by $s$ and $x$.
+	\item No entry or departure of individuals from the population is assumed
+\end{itemize}
+The system is modelled as
+\begin{align}
+	\dot{s} & = -\beta s x \\
+	\dot{x} & = \beta s x.
+\end{align}
+With constraint $s+x = 1$ the dynamics are reduced to a one dimensional system
+\begin{align}
+	\dot{x} & = \beta (1-x) x,
+\end{align}
+which has a closed form solution
+\begin{align}
+	x(t) & = \frac{x(0)\exp(\beta t)}{1 - x(0) + x(0) \exp(\beta t)}.
+\end{align}
+\subsection{SIR}
+This model adds a group of recovered subpopulation of size $R$. The model is
+\begin{align}
+	\dot{s} & = -\beta s x           \\
+	\dot{x} & = \beta s x - \gamma x \\
+	\dot{r} & = \gamma x.
+\end{align}
+The model does not have a closed form solution.\\
+\subsection{SIS}
+The SIS model allows for recovered individuals to be infected again and so it is modelled as
+\begin{align}
+	\dot{s} & = \gamma x - \beta s x  \\
+	\dot{x} & = \beta s x - \gamma x.
+\end{align}
+The constraint $s+x = 1$ implies
+\begin{align}
+	\dot{x} & = \beta (1-x) x - \gamma x       \\
+	\dot{x} & = (\beta - \gamma) x - \beta x^2
+\end{align}
+which has a closed form solution
+\begin{align}
+	x(t) & = \left(1 - \frac{\gamma}{\beta}\right) \frac{c \exp[(\beta - \gamma) t]}{1+c \exp[(\beta - \gamma) t]}, \: {\rm where} \\
+	c    & = \frac{\beta x_0}{\beta - \gamma - \beta x_0}
+\end{align}
+The system has a globally asymptotically stable equilibrium $x = 0$ for $\beta - \gamma < 0$.
+
+\section{Explain how to model epidemics on networks. What is the role of vertices and vertex variables?}
+Network epidemics models divide the whole population into subgroups having different contact patterns to give a detailed predictions including the effects of various management strategies that treat various segments of the population differently.
+\begin{itemize}
+	\item Each graph node describes a subpopulation $s_i, x_i, r_i, \dots$ - for example cities, regions or different groups in the population - seniors, children
+	\item The spread across the network depends on the connectivity of the graph
+	\item In networked epidemics models we use degree approximation - all nodes of the same degree are assumed to behave similarly regardless of their precise position in the network
+\end{itemize}
+\subsection{nSI}
+Diagonal adjacency matrix elements $A_{ii} = 1$
+\begin{align}
+	\dot{s}_i & = - \beta s_i \sum_{k} A_{ij} x \\
+	\dot{x}_i & = \beta s_i \sum_{j} A_{ij} x_j
+\end{align}
+\subsection{A stochastic variant of the networked model}
+This variant uses correlations instead of products
+\begin{align}
+	\odv{}{t} <s_i> & = - \beta \sum_{j} A_{ij} <s_i x_j>
+\end{align}
+
+\section{Describe the Lotka-Volterra predator-prey model. Explain various ways how it extends to the network setting.}
+A population dynamics model is given in a form
+\begin{align}
+	\dot{x}_i & = x_i \alpha_i(x_i, x_1, \dots, x_n),
+\end{align}
+where $\alpha_i$ is the growth rate for species $i$, depending generally on all other species' populations in the ecosystem. The whole system is a non-negative compartmental system.
+
+The Lotka-Volterra model is defined as
+\begin{align}
+	\dot{x} & = x(\alpha - \beta y)       \\
+	\dot{y} & = y ( - \gamma + \delta x),
+\end{align}
+where $x$ describes the prey population, $y$ describes the predator population and $\alpha, \beta, \gamma, \delta > 0$.\\
+There exists a preserved quantity
+\begin{align}
+	V = -\delta x + y \ln x - \beta y + \alpha \ln y.
+\end{align}
+There is a single equilibrium state surrounded by a continuum of periodic orbits.
+\subsection{Network variants}
+\subsubsection{Multiple species}
+\begin{align}
+	\dot{x}_i & = x_i \left(\alpha_i + \sum_j A_{ij} x_j\right),
+\end{align}
+where $A_ij$ has signed edges
+\begin{align}
+	A_{ij}
+	\begin{cases}
+		> 0, \: \text{if species $i$ preys on species $j$} \\
+		< 0, \: \text{if species $j$ preys on species $i$}
+		% = 0, \: \text{if species $i$ and $j$ do not interact}
+	\end{cases}.
+\end{align}
+Graph edges model predator-prey relations within one ecosystem.
+
+\subsubsection{Patchy environment}
+This variant models interaction of two species in multiple locations
+\begin{align}
+	\dot{x}_i & = x_i (\alpha - \beta y_i) + \sum_j A_{ij} x_j   \\
+	\dot{y}_i & = y_i (-\gamma + \beta x_i) + \sum_j A_{ij} y_j,
+\end{align}
+where $x_i$ describes the size of prey population in location $i$. Graph edges model the migration from neighboring areas in proportion to populations in the $i^{\rm th}$ location.
+
+
+
+\end{document}
