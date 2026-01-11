@@ -76,7 +76,8 @@ Which can be written as
 
 This can be written in matrix notation using the Laplacian
 \begin{align}
-	\dot{x} & = - L x,\: \text{ where $x$ is the multi-agent state vector} \\
+	\dot{x} & = - (D - E) x,\: \text{ where $x$ is the multi-agent state vector} \\
+	\dot{x} & = - L x                                                            \\
 	x       & = \begin{bmatrix}
 		            x_1 & x_2 & \dots & x_N
 	            \end{bmatrix}^T
@@ -108,18 +109,40 @@ which can again be written in matrix notation
 \section{Write the single-integrator leaderless consensus dynamics in discrete time. How to include a leader?}
 In discrete time the model of a single agent is
 \begin{align}
-	x_i(k+1) & = u_(k).
+	x_i(k+1) & = u_i(k).
 \end{align}
 Cooperative local neighborhood signal for control is
 \begin{align}
 	u_i(k) & = \frac{1}{1+d_i} \left[\sum_j e_{ij}(x_j(k) - x_i(k))\right] \\
-	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right].
+	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right],
 \end{align}
+where $e_{ij}$ are elements of the adjacency matrix $E$.
 In compact notation the closed loop system is
 \begin{align}
-	x(k+1) & = (I + D)^{-1} (I + E)x(k)
+	x(k+1) & = (I + D)^{-1} (I + E)x(k),
 \end{align}
-\TODO{Check}
+where $D = diag(d_i)$.
+
+Perhaps a clearer way to write the equation is to define the input as
+\begin{align}
+	x_i(k+1)       & = x_i(k) + \tilde{u}_i(k)                                       \\
+	\tilde{u}_i(k) & = - \frac{1}{1+d_i} \sum_j e_{ij} \left[x_i(k) - x_j(k)\right].
+\end{align}
+In matrix notation it can be rewritten using the Laplacian
+\begin{align}
+	x(k+1)       & = x(k) + \tilde{u}(k)     \\
+	\tilde{u}(k) & = - (I + D)^{-1} L x (k).
+\end{align}
+
+\subsection{Leader}
+We can add an uncontrolled leader $x_o$ and then add a pinning control term to the control input for every other agent
+\begin{align}
+	\tilde{u}_i(k) & = \frac{1}{1+d_i+g_i} \left[\sum_j e_{ij} \left[x_j(k) - x_i(k)\right] + g \left[x_0(k) - x_i(k)\right]\right]
+\end{align}
+or in matrix notation
+\begin{align}
+	\tilde{u}(k) & = -(I + D + G)^{-1}(L+G)\left[x(k) - \bm{1}_N x_0\right].
+\end{align}
 
 % -------------------------------------------------------------------------
 \section{Set up the dynamical equations for continuous-time homogeneous LTI agents using local neighborhood error signal for state synchronization.}
