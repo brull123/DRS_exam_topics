@@ -17,7 +17,7 @@ clean:
 	for /R %%f in (*.toc) do del /Q "%%f"
 	for /R %%f in (*.gz) do del /Q "%%f"
 	for /R %%f in (*.gz) do del /Q "%%f"
-	for /R %%f in (exam_questions.pdf) do del /Q "%%f"
+# 	for /R %%f in (exam_questions.pdf) do del /Q "%%f"
 
 else
 
@@ -30,7 +30,9 @@ clean:
 		-name "*.out" -o \
 		-name "*.toc" -o \
 		-name "*.gz" -o \
-		-name "exam_questions.pdf"
 	\) -delete
 
 endif
+
+# Add on line 33
+# 		-name "exam_questions.pdf"
