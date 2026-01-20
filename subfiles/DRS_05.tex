@@ -1,6 +1,7 @@
 \documentclass[../exam_questions.tex]{subfiles}
 
 \begin{document}
+\chapter{Lecture 5}
 \section{Define PageRank and modified PageRank.}
 \begin{definition}{Page Rank}{}
 	Modified version of Katz centrality - normalized by its out-degree. Nodes pointing out to many other nodes have their importance proportionally discounted.
@@ -10,6 +11,7 @@
 		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
 	\end{align}
 \end{definition}
+
 \section{Explain hubs and authorities and their relation to co-citation and bibliographic coupling.}
 \begin{definition}{Authories and Hubs}{}
 	An important authority has a lot of useful Hubs pointing to it.
@@ -22,6 +24,7 @@
 	\end{align}
 \end{definition}
 \subsection{Closeness centrality}
+
 \section{Define closeness centrality and discuss different variants thereof.}
 \begin{definition}{Closeness centrality}{}
 	Closeness centrality defines the importance of a node in a graph as being measured by how close it is to all other nodes in the graph.
@@ -40,6 +43,7 @@
 		c_i' & = \frac{1}{n-1} \sum_{j\neq i}\frac{1}{d_{ij}}
 	\end{align}
 \end{definition}
+
 \section{Define betweenness centrality.}
 \begin{definition}{Betweenness centrality}{}
 	Betweenness centrality measures the importance of a node in a graph based upon how many times it occurs in the shortest path between all pairs
@@ -53,6 +57,7 @@
 		x_i & = \sum_{s,t}\frac{n^i_{st}}{g_{st}},
 	\end{align}
 \end{definition}
+
 \section{Explain the difference between cliques, plexes and cores.}
 \subsection{Clique}
 \begin{definition}{Clique of size $n$}
@@ -89,8 +94,12 @@
 	A subset of graph vertices where each 2 vertices are connected by a path
 \end{definition}
 \subsection{k-component}
+
+\section{Define k-components and compare them with connected components.}
 \begin{definition}{$k$-component}{}
 	A subset of graph vertices where each 2 vertices are connected via at least $k$ vertex independent paths - paths with no common vertex other than start and end
 \end{definition}
-\section{Define k-components and compare them with connected components.}
+\begin{itemize}
+	\item A 1-component is a regular component
+\end{itemize}
 \end{document}

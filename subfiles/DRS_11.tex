@@ -2,6 +2,7 @@
 
 \begin{document}
 
+\chapter{Lecture 11}
 \section{Describe the variant Kernighan-Lin algorithm for community detection. What is its complexity? How does it compare to the original Kernighan-Lin algorithm for graph partitioning?}
 A heauristic algorithm.\\
 Divides the network into 2 clusters of vertices. Calculate the change of modularity when moving a vertex to the other group.
@@ -10,6 +11,9 @@ In each iteration choose the vertex which minimizes the Modularity the most.
 Overall complexity $O(nm)$, $n$ vertices. The original has $O(n^2m)$.
 
 \section{Describe the spectral modularity maximization method of community detection. Explain the importance of the modularity matrix and its leading eigenvector.}
+\begin{warningbox}
+	Proof/Derivation is required as a part of the exam
+\end{warningbox}
 \begin{align}
 	Q               & = \frac{1}{2m} \sum_{i,j} A_{ij} - \frac{d_i d_j}{2m} \delta (c_i, c_j) = \frac{1}{2m} \sum_{i,j} B_{i,j} \delta(c_i, c_j) \\
 	\text{2 communities} \: c_i \pm 1                                                                                                            \\

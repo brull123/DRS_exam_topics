@@ -1,6 +1,7 @@
 \documentclass[../exam_questions.tex]{subfiles}
 
 \begin{document}
+\chapter{Lecture 4}
 \section{Define the Metzler matrix.}
 Metzler matrix is a matrix, where all off-diagonal components are nonnegative, $M_ij \geq 0, \: i \neq j$.
 A dynamical system modelled by a Metzler matrix  $\dot{x} = Mx$ has its dynamical trajectories contained in the positive orthant $\R^n_{+}$, if the initial values are from the orthant.\\
@@ -23,12 +24,53 @@ A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
 
 
 \section{Explain how the geometric multiplicity of eigenvalues differ from the algebraic one.}
+\subsection{Algebraic multiplicity}
+If 0 is a simple eigenvalue, then:
+\begin{itemize}
+	\item The graph is strongly connected
+	\item The Frobenius form has only one irreducible diagonal block = the entire matrix
+	\item There exists a spanning tree of the graph
+	\item In case of a spanning forest, the multiplicity of the Laplacian's zero is the minimum number of trees which together span all vertices in the graph
+\end{itemize}
+\subsection{Geometric multiplicity}
+\TODO{Missing}
 
 \section{Explain the meaning of the geometric multiplicity of a zero eigenvalue for graph Laplacians.}
 By construction, the Laplacian matrix always has at least one zero eigenvalue. The amount of zero eigenvalues of the graph Laplacian is the amount of spanning trees in the spanning forest of the graph = number of strongly connected components of the graph.
 
 \section{Define the left zero eigenvector.}
-\TODO{missing}
+For any graph
+\begin{align}
+	L        & = D - A,
+\end{align}
+then
+\begin{align}
+	L \bm{1} & = 0.
+\end{align}
+There must also exist
+\begin{align}
+	\exists p^T, \: p^T L & = 0,
+\end{align}
+a left eigenvector corresponding to the eigenvalue 0. 
+The elements $p_i$ of the left eigenvector $p$ are nonnegative
+\begin{align}
+	p_i \geq 0, \quad p \succeq 0.
+\end{align}
+The elements which are greater than 0 correspond to nodes of the graph which can be roots of a spanning tree.
+For a strongly connected graph $\forall p_i, \: p_i > 0$.
+
+
+A weight-balanced graph has the following property
+\begin{align}
+	d_i^{in} & = d_i^{out}\\
+	L &= L^T.
+\end{align}
+Then it is true that
+\begin{align}
+	p^T &= \bm{1}^T, \\
+	\bm{1}^T L &= 0.
+\end{align}
+\TODO{Missing}
 
 \section{Define a balanced graph.}
 A balanced graph is a graph where the indegree and outdegree of each vertex are equal. An example of a balanced graph is an undirected graph.

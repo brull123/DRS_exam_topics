@@ -1,6 +1,8 @@
 \documentclass[../exam_questions.tex]{subfiles}
 
 \begin{document}
+\chapter{Lecture 3}
+
 \section{Define a path and explain the difference between an Eulerian and a Hamiltonian path.}
 \subsection{Eulerian path}
 An Eulerian path is a path visiting each edge in a graph only once.\\
@@ -8,9 +10,11 @@ Each Eulerian path must leave a vertex it enters, except of the starting and end
 \subsection{Hamiltonian path}
 A Hamiltonian path is a path visiting each vertex in the graph only once.\\
 It is necessarily self-avoiding. Finding of such path is more difficult than finding of a Eulerian path.
+
 \section{State the min-cut max-flow theorem.}
 Maximal flow equals the cardinality of the minimum edge cut set times the maximal throughput.\\
 If each edge carries unit flow then the maximal flow between a given pair of vertices equals the edge connectivity of those two vertices.
+
 \section{Define the graph Laplacian matrix and its relation to diffusion processes on graphs.}
 Given the conventional nonnegative adjacency matrix of a graph $A \in \R^{n \times n}$,
 the \textbf{graph Laplacian matrix} $L \in \R^{n \times n}$ is defined as
@@ -26,6 +30,7 @@ The sign-less graph Laplacian matrix $Q \in \R^{n \times n}$ is defined as
 By construction $L \bar{1}_n = 0$, therefore 0 is always an eigenvalue of the Laplacian matrix and the Laplacian matrix is always singular.
 The sign-less Laplacian $Q$ does not share this property.\\
 The zero eigenvalue fo the graph Laplacian may be simple or multiple, depending on the graph topology.
+
 \section{State the Geršgorin disc theorem and explain how it is applied to the graph Laplacian.}
 Let $A = (a_{ij})$ be an $n \times n$ complex matrix. For each row $i$, define the Geršgorin disc
 \begin{align}
@@ -57,8 +62,12 @@ The Laplacian is therefore always positive semi-definite.
 	\caption{Geršorin disc theorem applied to the graph Laplacian}
 \end{figure}
 
-
 \section{Define the Fiedler eigenvalue and explain its significance for the graph topology.}
+\begin{definition}{Fiedler eigenvalue}{}
+	If zero is a simple eigenvalue of the Laplacian matrix $L$, the Fiedler eigenvalue $\lambda_2(L) > 0$ (or $\Re{(\lambda_2)} > 0$) in directed graphs.
+\end{definition}
+It is the smallest Laplacian's non-zero eigenvalue. It gives the spectral gap of $L$ - the value of which is proportional to the overall graph connectivity.\\
+The Fiedler eigenvalue is often referred to as algebraic connectivity of the graph.
 
 \section{Define the Frobenius form of the graph Laplacian and explain how it reveals the graph topology.}
 There exists a permutation of the vertex labels that results in a block triangular Laplacian matrix. The permutation

@@ -1,11 +1,30 @@
 \documentclass[../exam_questions.tex]{subfiles}
 
 \begin{document}
+\chapter{Lecture 6}
 \section{Define transitivity of a network in any of equivalent ways.}
+Transitivity measures how strongly a network tends to form triangles - weather "a fried of my friend is also my friend".
+\begin{definition}{Transitivity}{}
+	Transitivity is a global measure defined using any of the following formulas
+	\begin{align}
+		C & = \frac{\text{number of closed paths of length 2}}{\text{number of paths of length 2}} \\
+	\end{align}
+	This formula shows a probability that two neighbors of the same node are connected. Among all two-step paths $A-B-C$, how many are closed by an edge $A-C$?
+	\begin{align}
+		C & = \frac{\text{number of triangles $\times$ 6}}{\text{number of paths of length 2}} \\
+	\end{align}
+	Each triangle can have its vertices ordered in 6 ways. It has the same meaning as the previous definition.
+	\begin{align}
+		C & = \frac{\text{number of triangles $\times$ 3}}{\text{number of connected triples}} \\
+	\end{align}
+	A single triangle can be written as 3 connected triples, one centered at each node. The formula is then: how many closed triples among all triples.
+\end{definition}
+
 \section{Define local clustering.}
 \begin{align}
 	C_i & = \frac{\text{number of pairs of neighbors of vertex} \: i \:  \text{that are connected}}{\text{number of pairs of neighbors of vertex}\:i}
 \end{align}
+
 \section{Explain the concept of reciprocity and how it relates to loops of length two.}
 \begin{definition}{Reciprocity}{}
 	A global measure of the graph $r$
@@ -14,13 +33,20 @@
 	\end{align}
 	Equals to the number of 2-loops normalized to the number of edges.
 \end{definition}
+
 \section{Define structural balance for networks with signed edges. Show that structurally balanced network is certainly clusterable (Harrary's theorem).}
 Signed edges carry a positive or negative sign.\\
 A graph is structurally balanced if all loops in the graph have even number of negative edges.\\
 A signed network is clusterable if it is possible to clearly partition it into two subsets of vertices such taht all edges betwwen certices within each subset are positive while all the edges between the two subsets are negative.\\
 Clustering algorithm - color the vertices along paths using 2 colors, change the color when traversing a negative edge.
 After finishing the loop, the color changed even times - so it has changed to the original color of the first vertex in the loop.
+
 \section{Show by counterexample that a clusterable network need not be structurally balanced.}
+A triangle with every edge negative. Each vertex is a cluster of 1 node. There are 3 clusters.
+\begin{notebox}
+	Definition above defines a 2-clusterable network, but during the lecture, the counterexample was this one exactly, with three clusters
+\end{notebox}
+
 
 \section{Explain vertex similarity.}
 A measure defined between two vertices
