@@ -21,6 +21,7 @@ Log complexities usually appear when dealing with trees.
 	\item Hybrid representation
 	\item Heap
 \end{itemize}
+
 \subsection{Adjacency matrix}
 It is the most straightforward method.
 Requires a lot of space for storing zeros, especially for a sparse graph.
@@ -32,19 +33,40 @@ Complexity
 \end{itemize}
 
 \subsection{Adjacency list}
-Nodes point to their neighbors. Decreases storage size requirements. \\
-It lists a vertex and its outgoing edges or incoming edges
+The adjacency list is most useful in the majority of applications. Avoids storing 0 for nonexistent edges.
+It lists a vertex and its outgoing edges or incoming edges. Storing both doubles the space requirement but remains in the same complexity class.
+
+The adjacency list has storage complexity $O(n \times m)$ which is less then $O(n^2)$ for sparse networks.
+
+A modification of the adjacency also stores the in-degree which reduces computational complexity of many algorithms (for example degree centrality).
+
+Complexity
+\begin{itemize}
+	\item Addition of a new node - $O(1)$
+	\item Deletion of a node - $O(\frac{m}{n})$
+	\item Calculation of degree $d_i$ - $O(\frac{m}{n})$, $O(m)$ to calculate all degrees
+\end{itemize}
 
 
 \section{Define the tree data structure. What is a balanced tree and what is the worst case complexity of finding an element in it?}
+Useful for specific algorithms when a neighbor with the highest degree needs to be accessed immediately.
 Binary tree - each entry in this data structure has none, one or two children entries\\
 Stores lists of neighbors of a given vertex\\
-Finding a specific entry takes at worst $O(k)$ where $k$ is the depth of the tree. For a balanced tree the complexity is $O(\log k)$
+A sorted binary tree has the highest degree value in the root and every child has lower degree than the parent.
+
+Balanced tree - a sorted binary tree, for every node every lower valued node is in the left subtree and every higher valued node is in the right subtree
+
+Complexity
+\begin{itemize}
+	\item Finding a specific entry is at worst $O(k)$, where $k$ is the depth of the tree. For a balanced tree $O(log(k))$.
+\end{itemize}
 
 \section{Explain how trees are used to represent networks.}
-\TODO{Missing}
+Stores the member of each node in a tree structure. The edges in the tree do not represent edges in the network.
+It is used when for example a neighbor with a highest degree needs to be accessed in $O(1)$.
 
 \section{Define a binary heap. Why would one use such a structure in network algorithms?}
+Based on a tree.
 Each entry consists of a label and a value, this value is less than any of its children. Uses dynamic memory allocation.
-Adding a node has complexity $O(\log k)$. Removing the entry with the smallest value is $O(1)$.
+Adding a node has complexity $O(\log k)$. Removing the entry with the smallest value is $O(1)$, it is always at the top of the heap.
 \end{document}
