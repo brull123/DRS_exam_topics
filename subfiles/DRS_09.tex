@@ -9,7 +9,7 @@ BFS is used for finding the shortest distance between a pair of nodes. The short
 \begin{itemize}
 	\item In a single run for a given vertex the algorithm returns the shortest distance to all other vertices in the same connected component
 	\item There exists no other procedure to calculate the shortest distances between a given pair of vertices in the same connected component faster in the worst case
-	\item The algorithm also return the geodesic path
+	\item The algorithm also returns the geodesic path
 \end{itemize}
 
 \subsection{The algorithm}
@@ -47,6 +47,15 @@ Using a FIFO buffer (Queue) data structure, we only store vertices at distance $
 	\item $O(n+m)$
 	\item For multiple paths an efficient implementation has complexity $O(n\log n + m)$
 \end{itemize}
+\subsection{Method for multiple paths}
+\begin{itemize}
+	\item When exploring $u \rightarrow v$
+	\item If $v$ is unvisited, set its distance to $dist(u)+1$ and add $u$ to $v$'s parents
+	\item If $v$ is visited and its distance is equal $dist(u)+1$ add $u$ to $v$'s parents
+	\item Otherwise ignore the node, the discovered path would have been longer
+\end{itemize}
+This creates a directed graph, which is not necessarily a tree, in this directed graph, you can find all paths using recursion.
+\TODO{Complexity of multiple paths missing}
 
 \section{Describe Dijkstra's algorithm, explain why it works and analyze its computational complexity.}
 \begin{itemize}
@@ -68,6 +77,7 @@ Using a FIFO buffer (Queue) data structure, we only store vertices at distance $
 	\item In the worst case the algorithm needs $n$ iterations - total complexity $O(n^2 + m)$
 	\item Implementation with a heap gives $O((m+n)\log n)$
 \end{itemize}
+\TODO{2 implementations, storage in adjacency tree / heap}
 
 \section{Explain how to apply Dijkstra's algorithm to find the actual least weight path tree for a given starting vertex.}
 \begin{itemize}

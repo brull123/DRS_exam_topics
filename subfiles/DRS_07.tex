@@ -29,19 +29,30 @@ Dissortatively mixed networks usually consist of high-degree hubs weakly connect
 
 
 \section{Define the power law distributions, explain how to calculate their moments.}
-\TODO{Missing}
+A statistical characterization of a large network uses power-law degree distributions.
+
+Probability $p_k$ of finding a vertex of degree $d_i = k$ is defined as
+\begin{align}
+	\ln p_k & = - \alpha \ln k + C.
+\end{align}
+The distribution allows for high number of low-degree nodes and very low number of high-degree nodes.
+This is the case of the Internet with a low number of hubs and high amount of users connecting to the hubs.
 
 \section{Explain the effect of top heavy distribution of vertex degrees for the networks.}
-A minor proportion of highly connected vertices accounts for a sizeable portion of the graph edges.\\
-Such networks are remarkably robust to random node failure, but extremely susceptible to targeted attacks.
+A minor proportion of highly connected vertices accounts for a sizeable portion of the graph edges.
+High clustering coefficient. \\
+Such networks are remarkably robust to random node failure, but extremely susceptible to targeted attacks. \\
+
+A fraction of edges attributed to the fraction $p$ of highest degree vertices can be derived from the power law distribution
+\begin{align}
+	W & = p^{\frac{\alpha - 2}{ \alpha - 1}}
+\end{align}
+"If I sort the vertices by degree, take only the top 1\% ($\frac{p}{100} \%$) , how many edges will I have."
 
 \section{Explain the importance of the small world effect for the functionality of computer networks.}
 \begin{definition}{Small world networks}{}
-	\begin{itemize}
-		\item It is an example of a regular graph - each vertex connects to an even number $c$ of symmetrically placed immediate neighbors
-		\item The diameter scales as $\log n$
-	\end{itemize}
-
+	The length of the shortest path between any 2 vertices grows with the logarithm of $n$.
 \end{definition}
-\TODO{Not complete}
+Appears in top-heavy distribution network.
+It is very important for the functionality of the Internet - in relatively reasonable amount of hops (10-15), you can reach any computer in the world.
 \end{document}
