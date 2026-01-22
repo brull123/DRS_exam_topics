@@ -22,31 +22,36 @@ BFS is used for finding the shortest distance between a pair of nodes. The short
 
 \section{Explain the computational complexity of the naive implementation of the breadth-first search.}
 \begin{itemize}
-	\item Uses an array of vertex distances and distance counter $d$. At each step finds vertices of distance $d$ and look for their neighbors, update the distances which are presently unknown
-	\item Maximal number of iterations is $r$ - which is limited by the diameter of the graph
-	\item Updating distances has complexity $O(rn)$
-	\item Finding neighbors of distance $d$ in an adjacency has complexity $O(m/n)$. For all vertices it is $O(m \times n/n) = O(m)$
-	\item The total complexity is $O(rn + m)$. In worst case $r = n$. In small world $r \sim \log n$ which give $O(n\log n + m)$
+	\item Uses an array of vertex distances of length $n$ and distance counter $d$. At each step finds vertices of distance $d$ and look for their neighbors, update the distances which are presently unknown
+	\item Maximal number of iterations is $r$ - which is limited by the diameter of the graph. In the very worst case, the depth is $n$
+	\item In each iteration, you need to go through all $n$ values of the vertex distance array with complexity $O(n)$
+	\item The amount of neighbors of a single vertex is on average $m/n$. Using an adjacency list, finding the neighbors takes $O(m/n)$. We need to find the neighbors of all vertices so the complexity is $O(nm / n) = O(m)$.
+	\item The total complexity is then $O(rn + m)$
+	\item In the worst case where $r = n$ the complexity is $O(n^2+m)$.
 \end{itemize}
 
 \section{Explain the computational complexity of the more sophisticated implementation of the breadth-first search using a buffer.}
 Using a FIFO buffer (Queue) data structure, we only store vertices at distance $d+1$ we reduce the complexity of finding vertices at distance $d$
 \begin{itemize}
-	\item To set up the distance array $O(n)$
-	\item Find neighbors - average neighbors of a single vertex = $O(m/n)$ - in total $O(m)$
+	\item Finding all neighbors of a single vertex is the same = $O(m/n)$ - in total $O(m)$
+	\item In each iteration, we only need to go through vertices at distance $d$ so across all iterations, the algorithm goes over $n$ vertices in total. The complexity of finding vertices at a distance reduces to $O(n)$.
 	\item Total complexity $O(n+m)$
 	\item On a sparse network $m \sim n$ results in $O(n)$
 	\item On a dense network $m \sim n^2$ - $O(n^2)$
 \end{itemize}
 
 \section{Describe how to find the actual shortest paths. Assume first single shortest paths, then generalize to possible multiple shortest paths.}
+\begin{notebox}
+	Complexities are not required
+\end{notebox}
 \begin{itemize}
 	\item Construct a directed network representing the shortest paths
 	\item Start by creating a new graph having the same number of vertices with the same labels and 0 edges
-	\item Start BFS for $s$. Each time a neighboring vertex $j \in N_i$ is examined add an edge $(j,i)$ which results in a path leading to $s$. Adding the edge has complexity $O(1)$ in an adjacency list
-	\item $O(n+m)$
-	\item For multiple paths an efficient implementation has complexity $O(n\log n + m)$
+	\item Start BFS for $s$. Each time a neighboring vertex $j \in N_i$ is examined add an edge $(j,i)$ which results in a tree, a path leading to $s$ can be found by following the parents of nodes. Adding the edge has complexity $O(1)$ in an adjacency list
+	\item The algorithm requires the standard $O(n+m)$ run of BFS the path reconstruction then takes $O(k)$, where $k \leq n$ is the length of the path. So at worst it is $O(n+m+n) = O(n+m)$.
+	\item For multiple paths - $O(n \log n)$
 \end{itemize}
+
 \subsection{Method for multiple paths}
 \begin{itemize}
 	\item When exploring $u \rightarrow v$
@@ -55,7 +60,6 @@ Using a FIFO buffer (Queue) data structure, we only store vertices at distance $
 	\item Otherwise ignore the node, the discovered path would have been longer
 \end{itemize}
 This creates a directed graph, which is not necessarily a tree, in this directed graph, you can find all paths using recursion.
-\TODO{Complexity of multiple paths missing}
 
 \section{Describe Dijkstra's algorithm, explain why it works and analyze its computational complexity.}
 \begin{itemize}
@@ -71,13 +75,19 @@ This creates a directed graph, which is not necessarily a tree, in this directed
 	\item Repeat from step 1 until all distances are certain
 \end{enumerate}
 \subsection{Complexity}
+\subsubsection{Naive implementation}
 \begin{itemize}
-	\item $O(n)$ for search of vertices
-	\item Distance estimate add $O(m/n)$ for a single iteration
+	\item Search through $n$ vertices to find the one with shortest distance estimate from $s$ - takes $O(n)$
+	\item On average each iteration goes through $m/n$ neighbors - $O(m/n)$
 	\item In the worst case the algorithm needs $n$ iterations - total complexity $O(n^2 + m)$
-	\item Implementation with a heap gives $O((m+n)\log n)$
 \end{itemize}
-\TODO{2 implementations, storage in adjacency tree / heap}
+\subsubsection{Improved implementaiton}
+\begin{itemize}
+	\item Distance estimates are stored in a binary heap - reading and removing an item with the smallest value takes $O(\log n)$
+	\item In each iteration estimates of $O(m/n)$ vertices are taken and then in the worst case it takes $O(\log n)$ to replace each of the estimate in the heap
+	\item Each iteration then takes $O(\log n + \frac{m}{n} \log n)$
+	\item The amount of iterations in the worst case remains $n$ so the total complexity is $O((n+m) \log n)$
+\end{itemize}
 
 \section{Explain how to apply Dijkstra's algorithm to find the actual least weight path tree for a given starting vertex.}
 \begin{itemize}
@@ -93,10 +103,24 @@ To find the betweenness centrality of a vertex $v$
 for every distinct pair of vertices $s, t$ find the shortest path and check how many of these contain $v$
 
 \section{Describe the augmenting path algorithm (Ford-Fulkerson algorithm).}
+An algorithm to calculate a maximum flow in a graph with capacities on edges.
+A flow $f(u,v)$ must satisfy
 \begin{itemize}
-	\item Each edge carries a single unit of flow
-	\item Find a path $s \rightarrow t$ using BFS, each of the used edges are used and cannot carry more flow
-	\item Find other paths $s \rightarrow t$ using only the remaining edges
-	\item Repeat
+	\item $0 \leq f(u,v) \leq c(u,v)$, where $c(u,v)$ is the capacity of a given edge,
+	\item $\sum_{(u,v)\in E} f(u,v) = \sum_{(v,w) \in E} f(v,w)$.
 \end{itemize}
+The algorithm assigns all edges zero flow, then repeatedly, using BFS/Dijkstra, finds paths to push more flow from $s$ to $t$
+
+Given a current flow $f$, the residual capacity is $r$
+\begin{align}
+	r(u,v) & = c(u,v) - f(u,v) \: \text{the residual capacity says how much more flow can be pushed through the edge}.
+	r(v,u) & = f(u,v) \: \text{gives a capacity to undo some flow, which may lead to increase in overall flow}
+\end{align}
+
+The flow of a path is given by a bottleneck $\Delta$- the minimal capacity of the edges in the path.
+We update the flow $f(u, v)$ of edges $(u,v)$ on the path as $f(u,v) = f(u,v) + \Delta$.
+On the backward edges we update it as $f(v, u) = f(v,u) - \Delta$. The backward edge may remove previously assigned flow of the forward edge to increase the total flow.
+
+Given the residual capacities, we can create a residual graph, which contains the same vertices but and edge $(u,v)$ only of $r(u,v) > 0$.
+Then we search for paths on the residual graph and repeat until there are no more paths from $s$ to $t$.
 \end{document}
