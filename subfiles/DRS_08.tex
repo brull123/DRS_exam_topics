@@ -68,5 +68,7 @@ It is used when for example a neighbor with a highest degree needs to be accesse
 \section{Define a binary heap. Why would one use such a structure in network algorithms?}
 Based on a tree.
 Each entry consists of a label and a value, this value is less than any of its children. Uses dynamic memory allocation.
-Adding a node has complexity $O(\log k)$. Removing the entry with the smallest value is $O(1)$, it is always at the top of the heap.
+Adding or removing a node has complexity $O(\log n)$. Reading the value of the smallest element has complexity of $O(1)$ as it always is at the root of the heap.
+
+For example, Dijkstra's algorithm benefits from being able to access a node with smallest distance estimate.
 \end{document}

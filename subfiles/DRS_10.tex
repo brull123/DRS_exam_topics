@@ -4,29 +4,100 @@
 
 \chapter{Lecture 10}
 \section{Describe the power method for finding leading eigenvalues and eigenvectors. What is the importance of choosing the initial seed?}
-\TODO{Missing}
+\begin{definition}{Leading eigenvalues and eigenvectors}{}
+	For a square matrix $A \in \R^{n \times n}$, an eigenvalue-eigenvector pair $(\lambda, v)$ satisfies
+	\begin{align}
+		A v & = \lambda v, \quad v \neq 0.
+	\end{align}
+
+	The leading eigenvalue means the eigenvalue with the largest magnitude
+	\begin{align}
+		|\lambda_1| & = \max_i |\lambda_i|.
+	\end{align}
+	The corresponding eigenvector is the leading eigenvector $v_1$.
+\end{definition}
+
+A seemingly easy way of finding such pair is to find all eigenvalues and choose the one with the largest magnitude. This however requires too much computing power
+and is rather wasteful.
+
+\subsection{Power method for finding leading eigenvalues and eigenvectors}
+The core idea of the power method is a repeated multiplication of a vector by A. Components in the direction of the dominant eigenvector grow fastest in magnitude, so after
+normalization the iterate aligns with $v_1$.
+
+\subsubsection{The algorithm}
+\begin{enumerate}
+	\item Pick an initial vector $x_0 \neq 0$ and normalize it
+	\item For $k = 0, 1, \dots$:
+	      \begin{itemize}
+		      \item Multiply: $y_{k+1} = A x_k$
+		      \item Normalize: $x_{k+1} = \frac{y_{k+1}}{\lVert y_{k+1}\rVert}$
+		      \item Estimate eigenvalue: $\mu_{k+1} = x^T_{k+1} A x_{k+1}$
+		      \item Stop when either $\lVert x_{k+1} - x_k\rVert$ or $\lVert Ax_{k+1} - \mu_{k+1} x_{k+1}\rVert$ are small (bellow tolerance)
+	      \end{itemize}
+\end{enumerate}
+
+\subsection{Importance of initial value}
+Let he eigenvalues of A be ordered $|\lambda_1 |> |\lambda_2 |\geq \dots \geq|\lambda_n|$.
+In each iteration the product is roughly
+\begin{align}
+	{x_k} = A^k x_0\approx \lambda_1^k(\text{component along $v_1$}) + \lambda_2 (\text{component along $v_2$}) + \dots.
+\end{align}
+The ratio $\frac{\lambda_2^k}{\lambda_1^k}$ gradually diminishes, only leaving the $v_1$ component.
+However, for that to happen the initial vector $x_0$ has to have a nonzero component along $v_1$. If the initial vector were orthogonal to $v_1$, the algorithm will fail.
 
 \section{Explain how to efficiently find all eigenvalues and eigenvectors of a given matrix. Specify which algorithms are used for matrix transformation and efficient solution of the transformed eigen-problem, given different starting matrices (symmetric/asymmetric, sparse/dense).}
-\TODO{Missing}
+In general we use similarity transforms and apply efficient algorithms on the matrices in a special form.
+
+For symmetric matrices $A=A^T$ there exists an orthogonal matrix $Q,\: Q^{-1} = Q^T$, such that $Q^T A Q = T$, where $T$ is a tridiagonal matrix - nonzero elements are only on the diagonal and on both subdiagonals.
+For general matrices a similar orthogonal transformation exists, such $T$ is a Hessenberg matrix.
+If $Av_i = \lambda_i$  then
+\begin{align}
+	\lambda_i Q^T v_i & = Q^T A v_i = Q^T A Q Q^{-1} v_i = (Q^T A Q) Q^T v_i \\
+	(Q^T A Q) Q^T v_i & = T Q^T v_i, \: {\rm therefore}                      \\
+	T w_i             & = \lambda_i w_i, \:{\rm where}                       \\
+	w_i               & = Q^Tv_i.
+\end{align}
+
+There exist efficient numerical algorithms for finding eigenvectors and eigenvalue of triagonal or Hessenberg $T$ matrices.
+\begin{itemize}
+	\item QL algorithm - complexity $O(n)$ for a triagonal matrix, $O(n^2)$ for a Hessenberg matrix
+\end{itemize}
+
+Algorithms for finding the transformation matrix $Q$
+\begin{itemize}
+	\item For a general symmetric - Hauseholder algorithm - $O(n^3)$
+	\item For a sparse symmetric - Lanczos algorithm - $O(nm) \sim O(n^2)$
+	\item For an assymetric matrix - Arnoldi algorithm
+\end{itemize}
 
 \section{Why to use heuristic algorithms in general, even if no proof of correctness is available?}
-Heuristic algorithms return a result which is not guaranteed to be best fo all cases, but for most practical purposes it is often good enough. It returns a fairly good divisions - approximate but acceptable solutions - no proof of validity is available\\
+Heuristic algorithms return a result which is not guaranteed to be best for all cases, but for most practical purposes it is often good enough. It returns a fairly good divisions - approximate but acceptable solutions - no proof of validity is available\\
 We use heuristic algorithms, when it comes to computationally difficult problems  - either the algorithm runs fast but fails to find the best solution almost always, or it always finds the best solution but takes prohibitively long time to return the result\\
 Characteristically for heuristic algorithms, this assertion is not rigorously proven, hence it remains a conjecture, albeit one that points directly to the presumed fundamental difference between P and NP type problems
 
+\subsection{P vs NP hard problem}
+A P hard problem has a polynomial complexity - $O(n), \: O(n^2), \: O(\log n)$, etc.
+An NP hard problem has a non-polynomial complexity - algorithm fails almost always or takes prohibitively very long time - for example $O(2^n)$
+
+%% Video lecture 9 
 \section{What is the difference between the graph partitioning and the community detection problems?}
 \subsection{Graph partitioning}
-In graph partitioning, we are dividing graph vertices into a given number of non-overlapping groups of a fixed size. Number of inter-group edges is minimized.
-Motivated by task allocation in distributed computing. Applications in network process simulations on parallel computers
+In graph partitioning, we are dividing graph vertices into a given number of non-overlapping groups of a fixed size. \textbf{Number of inter-group edges is minimized}.
+
+Motivated by task allocation in distributed computing - tasks which rely on each other should run on a single processor - faster communication within a single processor. Applications in network process simulations on parallel computers
+
+Usually bi-partitioning - two clusters with sizes $n_1$ and $n_2$.
+
 \subsection{Community detection}
 Number and sizes of groups are not given but are result of an algorithm. It is primarily used as a tool for analysis and understanding network data. The criterion of division can be defined in various ways, through the extent of modularity.
-Reveals hidden structures in a network.
+Reveals hidden structures in a network. \textbf{The goal is also to minimize inter-group edges}.
 
 \section{Describe the Kernighan-Lin algorithm for graph partitioning. What is its computational complexity? What is roughly the size of the network for which it can be reasonably expected to work?}
+A heuristic algorithm for graph partitioning.
 \begin{enumerate}
 	\item Divide vertices into 2 groups $V_1$ and $V_2$ of required sizes $n_1,\:n_2$ in any way
-	\item For all pairs $i,j \in V_1, V_2$ calculate the change in cut set size between the groups if the vertices are interchanged
-	\item From all such pairs find the one $(i,j)*$ that reduces the cut set size the most, or in absence of any such, the one that increases the cut size the least
+	\item For all pairs $i,j \in V_1, V_2$ calculate the change in cut set size between the groups if the vertices are interchanged. The cut set is the set of inter-group edges.
+	\item From all such pairs find the one $(i,j)^*$ that reduces the cut set size the most, or in absence of any such, the one that increases the cut size the least
 	\item Swap the pair - this preserves assigned sizes of both groups
 	\item Repeat the process from step 2 with the exception that the moved pairs cannot be moved again in this round
 	\item Stop when there are no more pairs to swap
@@ -48,39 +119,70 @@ Reveals hidden structures in a network.
 \end{warningbox}
 \begin{itemize}
 	\item Spectral graph partitioning is a method for graph bipartition
-	\item It is based on the graph Laplacian
-	\item Assumes an undirected graph
-	\item The sizes of the 2 clusters are given
+	\item Assumes an undirected graph - $A = A^T$
+	\item The sizes $n_1, \: n_2$ of the 2 clusters $\mathcal{V}_1, \mathcal{V}_2$ are given, the clusters are disjoint and they mutually exhaust the entire vertex set $\mathcal{V}$.
 	\item The cut set size equals
 	      \begin{align}
-		      R & = \frac{1}{2} \sum_{i,j} A_{ij}
+		      R & = \frac{1}{2} \sum_{i,j} A_{ij}, \: {\rm where} i \in \mathcal{V}_1 \wedge j \in \mathcal{V}_2
 	      \end{align}
 \end{itemize}
-\begin{enumerate}
-	\item Define a vector $s \in \R^n$ with components $s_i$
-	      \begin{align}
-		      s_i & =
-		      \begin{cases}
-			      +1 \:\text{if}\: i \in V_1 \\
-			      -1 \:\text{if}\: i \in V_2 \\
-		      \end{cases}
-	      \end{align}
-	\item With the help of $s_i$ vertex labels one can construct the expression
-	      \begin{align}
-		      \frac{1}{2}(1 - s_i s_j) & =
-		      \begin{cases}
-			      1 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
-			      0 \:\text{if} \:(i,j) \:\text{vertices are in the same group}
-		      \end{cases}
-	      \end{align}
-	\item We can then express the size of the cut set as
-	      \begin{align}
-		      R                      & = \frac{1}{2} \sum_{i,j = 1}^{n} A_{ij}\frac{1}{2}(1-s_i s_j) = \frac{1}{4} \sum_{i,j=1}{n} A_{ij}(1-s_i s_j) \\
-		      \sum_{i,j=1}^{n}A_{ij} & = \sum_{i=1}^{n}d_i = \sum_{i=1}^{n}d_i s_i^2 = \sum_{i=1}^{n}d_i \delta_{ij} s_i s_j                         \\
-		      R                      & = \frac{1}{4} \sum_{i=1}^{n} (d_i \delta_{ij} - A_{ij}) s_i s_j = \frac{1}{4} \sum_{i=1}^{n} L_{ij} s_i s_j   \\
-		      R                      & = \frac{1}{4} s^T L s
-	      \end{align}
-\end{enumerate}
+Define a vector $s \in \R^n$ with components $s_i$
+\begin{align}
+	s_i & =
+	\begin{cases}
+		+1 \:\text{if}\: i \in \mathcal{V}_1, \\
+		-1 \:\text{if}\: i \in \mathcal{V}_2.
+	\end{cases}
+\end{align}
+With the help of $s_i$ vertex labels one can construct the expression
+\begin{align}
+	\frac{1}{2}(1 - s_i s_j) & =
+	\begin{cases}
+		1 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
+		0 \:\text{if} \:(i,j) \:\text{vertices are in the same group}
+	\end{cases}
+\end{align}
+We can then express the size of the cut set as
+\begin{align}
+	R & = \frac{1}{2} \sum_{i,j} A_{ij}\frac{1}{2}(1-s_i s_j) = \frac{1}{4} \sum_{i,j} A_{ij}(1-s_i s_j).
+\end{align}
+The sum of elements of $A$ can be written as
+\begin{align}
+	\sum_{i,j}A_{ij}  & = \sum_{i}d_i = \sum_{i}d_i s_i^2, \: {\rm because} \: s_i^2 = 1 \\
+	\sum_{i}d_i s_i^2 & = \sum_{i,j} d_i \delta_{ij} s_i s_j.
+\end{align}
+This will give us the size of the cut set as
+\begin{align}
+	R & = \frac{1}{4} \sum_{i,j} (d_i \delta_{ij} - A_{ij}) s_i s_j.
+\end{align}
+Using the definition of the graph Laplacian
+\begin{align}
+	L      & = D - A                                       \\
+	L_{ij} & = D_{ij} - A_{ij} = d_i \delta_{ij} - A_{ij},
+\end{align}
+we can write the cut set size as
+\begin{align}
+	R & = \frac{1}{4} \sum_{i=1}^{n} L_{ij} s_i s_j \\
+	R & = \frac{1}{4} s^T L s.
+\end{align}
+
+The goal of the algorithm is to minimize $R = \frac{1}{4} s^T L s$, which is a restricted quadratic optimization problem. The values of $s$ lie on a hyper-cube.\\
+This problem unfortunately cannot be solved by calculating the jacobian as with standard quadratic optimization problems. It is also
+not feasible to evaluate the criterion function for every vector $s$ as the amount of possible values grows with $2^n$.
+
+The problem has additional constraints
+\begin{align}
+	\sum_i s_i   & = n_1 - n_2 \\
+	\sum_i s_i^2 & = n.
+\end{align}
+We can now relax the problem and constraint the values of $s$ on a surface of a hyper-sphere with a diameter of $\sqrt{n}$. This relaxes the problem from restricted optimization to constrained optimization.
+Such problem can be solved using Lagrangian optimization method
+\begin{align}
+	\pdv{}{s_i} \left[\sum_{jk} L_{jk} s_j s_k + \alpha \left(n - \sum_j s^2\right) + 2 \beta\left(n_1 - n_2 - \sum_j s_j\right) \right] = 0, \: \forall i
+\end{align}
+However, after you find the optimum, you need to find actual restricted values of $s_i$ closest to the nonrestricted optimum.
+\TODO{Explain how it is related to the Fiedler eigenvector}
+
 \subsection{Spectral Partitioning Algorithm}
 \begin{enumerate}
 	\item Calculate the Fiedler eigenvector $v \in \R^n$ of $L$
@@ -89,10 +191,13 @@ Reveals hidden structures in a network.
 	\item Assign $n_1$ most negative elements to $V_1$ and the remaining elements to $V_2$
 	\item Identify which partition results in smaller cut set size
 \end{enumerate}
+
 \subsection{Complexity}
 \begin{itemize}
-	\item Finding the Fiedler eigenvector can be done with $O(mn)$
+	\item Finding the Fiedler eigenvector can be done with $O(mn)$ - on a sparse network $O(n^2) < O(n^3)$ of Kernighan-Lin
+	\item However, the cut sets returned are usually larger than KL method
 	\item It is applicable for $n\leq 10^5$
 	\item The smaller is the Fielder eigenvalue, the easier it is to partition a network
+	\item The higher the Fiedler eigenvalue, the larger is the network connectivity - it is harder to separate into clusters
 \end{itemize}
 \end{document}
