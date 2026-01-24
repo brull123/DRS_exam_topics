@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\chapter{Lecture 10}
+\lecture{Lecture 10}
 \section{Describe the power method for finding leading eigenvalues and eigenvectors. What is the importance of choosing the initial seed?}
 \begin{definition}{Leading eigenvalues and eigenvectors}{}
 	For a square matrix $A \in \R^{n \times n}$, an eigenvalue-eigenvector pair $(\lambda, v)$ satisfies
@@ -179,7 +179,48 @@ We can now relax the problem and constraint the values of $s$ on a surface of a 
 Such problem can be solved using Lagrangian optimization method
 \begin{align}
 	\pdv{}{s_i} \left[\sum_{jk} L_{jk} s_j s_k + \alpha \left(n - \sum_j s^2\right) + 2 \beta\left(n_1 - n_2 - \sum_j s_j\right) \right] = 0, \: \forall i
+	2 \sum_j L_{ij}s_j - 2 \alpha s_i - 2 \beta &= 0\\
+	L s - \alpha s - \beta \bm{1} &= 0.
 \end{align}
+Using the left eigenvector of the Laplacian, we can solve for $\beta$
+\begin{align}
+	\bm{1}^T L s - \alpha \bm{1}^T s - \beta \bm{1}^T\bm{1} &= \\
+	0 - \alpha (n_1 - n_2) - \beta n &= 0\\
+	\beta &= \alpha\frac{n_2-n_1}{n}.
+\end{align}
+We can now substitute for $\beta$
+\begin{align}
+	L s &- \alpha s -  \alpha\frac{n_2-n_1}{n}\bm{1} = 0\\
+	L s &= \alpha \left( s + \frac{n_2 - n_1}{n}\bm{1} \right).
+\end{align}
+The Laplacian has the following property $L \bm{1} = 0$ so we can write
+\begin{align}
+	L\left( s + \frac{n_2 - n_1}{n}\bm{1} \right) &= \alpha \left( s + \frac{n_2 - n_1}{n}\bm{1} \right).
+\end{align}
+This allows us to define a new vector $x$
+\begin{align}
+	x &= s + \frac{n_2 - n_1}{n} \bm{1}\\
+	L x &= \alpha x.
+\end{align} 
+Therefore $x$ is the eigenvector to the $\alpha$ eigenvector to the Laplacian $L$.
+
+This means that the cut size is 
+\begin{align}
+	R &= \frac{1}{4} s^T L s = \frac{1}{4}x^T L x = \frac{1}{4} \alpha x^T x,
+\end{align}
+since $s$ and $x$ by $\frac{n_2 - n_1}{n}\bm{1}$ which is in kernel of $L$.
+
+Then
+\begin{align}
+	x^T x &= \left(s + \frac{n_2 - n_1}{n} \bm{1}\right) ^T \left(s + \frac{n_2 - n_1}{n} \bm{1}\right)\\
+	x^T x &= s^T s + \frac{n_2 - n_1}{n} \left(s^T \bm{1} + \bm{1}^T s\right) + \left(\frac{n_2 - n_1}{n}\right)^2 \bm{1}^T \bm{1}\\
+	s^s &= n, \: s^T \bm{1} + \bm{1}^Ts = 2(n_1 - n_2), \: \bm{1}^T \bm{1} = n\\
+	x^T x &= n -2 \frac{(n_2-n_1)^2}{n} + \left(\frac{n_2-n_1}{n}\right)^2 n\\
+	x^T x &= n -2 \frac{(n_2-n_1)^2}{n} + \frac{(n_2-n_1)^2}{n}\\
+	x^Tx &= n - \frac{(n_2-n_1)^2}{n} = \frac{n^2 - (n_2-n_1)^2}{n}
+
+\end{align}
+
 However, after you find the optimum, you need to find actual restricted values of $s_i$ closest to the nonrestricted optimum.
 \TODO{Explain how it is related to the Fiedler eigenvector}
 

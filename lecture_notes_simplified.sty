@@ -3,6 +3,7 @@
 
 % Load the original style
 \RequirePackage{lecture_notes}
+\RequirePackage{calc}
 
 % --- Simplify the metadata behaviour ---------------------------------
 % Original \setlecture added the lecture number into the title and
@@ -17,6 +18,16 @@
   \renewcommand{\notetaker}{#6}% kept in case you need it elsewhere
 }
 
+\newsavebox{\lecturebox}
+\newcounter{lecture}
+\newcommand{\lecture}[1]{%
+  \clearpage
+  \refstepcounter{lecture}
+  \addcontentsline{toc}{section}{#1}
+  \noindent
+  \textbf{\LARGE\bfseries#1}\\
+  \noindent\rule{\widthof{\textbf{\LARGE\bfseries#1}}}{2pt}
+}
 
 % --- Simplify the title block ----------------------------------------
 % Use only course name + lecture title, no lecturer, number, note taker, date.
