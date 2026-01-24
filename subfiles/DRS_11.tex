@@ -2,34 +2,105 @@
 
 \begin{document}
 
-\lecture{Lecture 11}
+\lecture{Lecture 11} % Video lecture 9
 \section{Describe the variant Kernighan-Lin algorithm for community detection. What is its complexity? How does it compare to the original Kernighan-Lin algorithm for graph partitioning?}
-A heauristic algorithm.\\
-Divides the network into 2 clusters of vertices. Calculate the change of modularity when moving a vertex to the other group.
-In each iteration choose the vertex which minimizes the Modularity the most.
+In case of community detection, it is not possible to use the size of the cut set as a criterion as it would be always possible to set the size of one of the clusters to 0, rendering the cut set size also 0.\\
+Instead, we consider how many edges between vertices belonging to same communities as compared to randomly expected number of connections. Such property is measured with modularity
+\begin{align}
+	Q & = \frac{1}{2m} \sum_{i,j}\left(A_{ij} - \frac{d_i d_j}{2m}\delta(c_i, c_j)\right) = \frac{1}{2m}\sum_{i,j} B_{ij}\delta(c_i, c_j).
+\end{align}
 
-Overall complexity $O(nm)$, $n$ vertices. The original has $O(n^2m)$.
+This variant of the Kernighan-Lin is also a heuristic algorithm.
+Divides the network into 2 clusters of vertices. Calculate the change of modularity when moving a vertex to the other group.
+In each iteration choose the vertex which increases the modularity the most or decreases the least.
+A vertex that has been moved cannot be moved in the same iteration. Then we choose the best resulting partition from which we start another iteration.
+
+In each round $O(n)$ modularity changes are considered, for every vertex $O(m/n)$ possible connections to other vertices are evaluated. That is $O(m)$ per every iteration of the algorithm.
+The amount of iterations is proportional to $O(n)$ so in total the
+overall complexity is $O(nm)$. The original varian of the algorithm has complexity $O(n^2m)$.
 
 \section{Describe the spectral modularity maximization method of community detection. Explain the importance of the modularity matrix and its leading eigenvector.}
 \begin{warningbox}
 	Proof/Derivation is required as a part of the exam
 \end{warningbox}
+The method is based on the modularity matrix
 \begin{align}
-	Q               & = \frac{1}{2m} \sum_{i,j} A_{ij} - \frac{d_i d_j}{2m} \delta (c_i, c_j) = \frac{1}{2m} \sum_{i,j} B_{i,j} \delta(c_i, c_j) \\
-	\text{2 communities} \: c_i \pm 1                                                                                                            \\
-	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_i}{2m}\sum_{j} d_j = 0                                                                         \\
-	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_j}{2m}\sum_{i} d_i = d_j^{out} - d_j^{in}                                                      \\
+	Q & = \frac{1}{2m} \sum_{i,j} A_{ij} - \frac{d_i d_j}{2m} \delta (c_i, c_j) = \frac{1}{2m} \sum_{i,j} B_{i,j} \delta(c_i, c_j),
 \end{align}
+where $c_i$ are the community labels.
+
+By definition
 \begin{align}
-	\frac{1}{2} (1+ c_i c_j) & =
+	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_i}{2m}\sum_{j} d_j = 0, \: \text{}         \\
+	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_j}{2m}\sum_{i} d_i = d_j^{out} - d_j^{in},
+\end{align}
+which is also equal to zero on undirected and balanced graphs.
+
+We define a vector $s \in \R^n$ such that
+\begin{align}
+	s_i & =
 	\begin{cases}
-		1 ,\quad sgn(x_i) = sgn(c_j) \\
-		0
+		+1 \:\text{if}\: i \in \mathcal{V}_1, \\
+		-1 \:\text{if}\: i \in \mathcal{V}_2.
 	\end{cases}
 \end{align}
+With the help of $s_i$ vertex labels one can construct the expression
 \begin{align}
-	Q & = \frac{1}{4m}c^T B c
+	\frac{1}{2}(1 - s_i s_j) & =
+	\begin{cases}
+		1 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
+		0 \:\text{if} \:(i,j) \:\text{vertices are in the same group}.
+	\end{cases}
 \end{align}
+
+Using this expression, we rewrite the original expression for modularity
+\begin{align}
+	Q & = \frac{1}{4m} \sum_{i,j} B_{ij} (s_i s_j +1) = \frac{1}{4m} \left(\sum_{i,j} B_{ij}s_i s_j + \sum_{i,j} B_{ij}\right) \\
+	Q & = \frac{1}{4m} \sum_{i,j} B_{ij} s_i s_j = \frac{1}{4m} s^T B s.
+\end{align}
+
+The maximization is then a restricted quadratic optimization problem, which is difficult to solve, but we can relax the problem to a constrained optimization problem by
+rather than considering $s_i = \pm 1$ being the vertices of a hyper-cube, we allow them to attain values on a hyper-sphere.
+The diameter of the hyper-sphere is given by the constraint $s^Ts = \sum_i s_i^2 = n$ giving us the diameter $\sqrt(n)$.
+
+The relaxed problem is a constrained unrestricted optimization problem, which can be optimized using the Lagrange method
+\begin{align}
+	\pdv{}{s_i} \left[\sum_{j,k} B_{jk}s_j s_k + \beta \left(n - \sum_j s_j^2\right)\right] &= 0, \: \forall i\\
+	\sum_{j} B_{ij}s_j - \beta s_i &= 0,
+\end{align}
+which can be written in a compact version
+\begin{align}
+	B s &= \beta s.
+\end{align}
+This means that $\beta$ is an eigenvalue of $B$ and the modularity value is
+\begin{align}
+	Q &= \frac{1}{4m} s^T B s = \frac{1}{4m} \beta s^T s =\frac{1}{4m} \beta n.
+\end{align}
+
+The modularity value is then maximized by the leading eigenvector $u_1$ of the modularity matrix.
+However, this is only the optimum of the relaxed problem. To find an optimum to the original problem, we have to choose $s_i = \pm 1$ nearest to the optimum of the relaxed problem.
+This can be done by maximizing their product
+\begin{align}
+	s^T u_1 &= \sum_i s_i u_{1i},
+\end{align}
+by choosing
+\begin{align}
+	s_i &= \begin{cases}
+		+1, \: u_{1i} > 0\\
+		-1, \: u_{1i} < 0.
+	\end{cases}
+\end{align}
+If an element of the leading eigenvector is equal to zero, either assignment is equally fine.
+
+\subsection{Spectral modularity maximization algorithm}
+\begin{itemize}
+	\item Find the leading eigenvector of $B$ - $u_1 \in \R^n$
+	\item Assign vertices to the two communities based on the sign of the elements of $u_1$
+\end{itemize}
+
+Unfortunately, the modularity matrix $B$ is never sparse as opposed to the Laplacian, finding the leading eigenvector is therefore $O(n^3)$.
+
+
 
 \section{How does repeated bisection work for modularity maximization? Compare it with the same approach in graph partitioning.}
 \subsection{Modularity maximization}
