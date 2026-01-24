@@ -65,30 +65,30 @@ The diameter of the hyper-sphere is given by the constraint $s^Ts = \sum_i s_i^2
 
 The relaxed problem is a constrained unrestricted optimization problem, which can be optimized using the Lagrange method
 \begin{align}
-	\pdv{}{s_i} \left[\sum_{j,k} B_{jk}s_j s_k + \beta \left(n - \sum_j s_j^2\right)\right] &= 0, \: \forall i\\
-	\sum_{j} B_{ij}s_j - \beta s_i &= 0,
+	\pdv{}{s_i} \left[\sum_{j,k} B_{jk}s_j s_k + \beta \left(n - \sum_j s_j^2\right)\right] & = 0, \: \forall i \\
+	\sum_{j} B_{ij}s_j - \beta s_i                                                          & = 0,
 \end{align}
 which can be written in a compact version
 \begin{align}
-	B s &= \beta s.
+	B s & = \beta s.
 \end{align}
 This means that $\beta$ is an eigenvalue of $B$ and the modularity value is
 \begin{align}
-	Q &= \frac{1}{4m} s^T B s = \frac{1}{4m} \beta s^T s =\frac{1}{4m} \beta n.
+	Q & = \frac{1}{4m} s^T B s = \frac{1}{4m} \beta s^T s =\frac{1}{4m} \beta n.
 \end{align}
 
 The modularity value is then maximized by the leading eigenvector $u_1$ of the modularity matrix.
 However, this is only the optimum of the relaxed problem. To find an optimum to the original problem, we have to choose $s_i = \pm 1$ nearest to the optimum of the relaxed problem.
 This can be done by maximizing their product
 \begin{align}
-	s^T u_1 &= \sum_i s_i u_{1i},
+	s^T u_1 & = \sum_i s_i u_{1i},
 \end{align}
 by choosing
 \begin{align}
-	s_i &= \begin{cases}
-		+1, \: u_{1i} > 0\\
-		-1, \: u_{1i} < 0.
-	\end{cases}
+	s_i & = \begin{cases}
+		        +1, \: u_{1i} > 0 \\
+		        -1, \: u_{1i} < 0.
+	        \end{cases}
 \end{align}
 If an element of the leading eigenvector is equal to zero, either assignment is equally fine.
 
@@ -100,31 +100,46 @@ If an element of the leading eigenvector is equal to zero, either assignment is 
 
 Unfortunately, the modularity matrix $B$ is never sparse as opposed to the Laplacian, finding the leading eigenvector is therefore $O(n^3)$.
 
-
-
 \section{How does repeated bisection work for modularity maximization? Compare it with the same approach in graph partitioning.}
-\subsection{Modularity maximization}
-\begin{enumerate}
-	\item Divide vertices $V$ arbitrarily into two disjoint groups $V_1$ and $V_2$
-	\item Consider each vertex and calculate the change in modularity if it were to be moved to the other group
-	\item Identify a single vertex the movement of which increases the modularity the most or decreases the least. Move that vertex
-	\item Repeat the process from step 2 but a vertex moved already must not be moved again
-	\item Stop when there are no more vertices to consider
-	\item Go through all partitions and select the one with the maximal modularity
-	\item Start another round with this partition
-	\item Repeat until there are no more improvements
-\end{enumerate}
+Repeated bisection allows for division into more than two communities.
+The algorithm first separates the network into two communities. Then it runs again on each of the communities. This approach
+is applicable in graph partitioning, but in the case of community detection, modularity maximization upon bisecting each community does not in general maximize the total modularity of the resulting network division. We must therefore consider the resulting change in the total modularity.
 
-\begin{itemize}
-	\item The algorithm does not swap pairs but move individual vertices
-	\item Since the algorithm does not need to consider pairs, the complexity is reduced to $O(nm)$ compared to $O(n^2m)$ of the original KL algorithm for graph partitioning
-\end{itemize}
+For a community $C$ of $n_c$ vertices, the change in the modularity of the entire network upon bisection of $C$ equals
+\begin{align}
+	\Delta Q & = \frac{1}{4m} s^T B^C s,\:{\rm where}       \\
+	B_{ij}^C & = B_{ij} - \delta_{ij} \sum_{k\in C} B_{ik}.
+\end{align}
+We can now use the spectral modularity maximization is applicable on modularity change matrix $B^C$.
+We continue bisection of communities as long as modularity increase is possible.
+
 
 \section{Briefly describe simulated annealing, genetic algorithm and greedy algorithm for modularity maximization.}
 \subsection{Simulated annealing}
-Lower uncertainty slowly, the solution should converge
+A stochastic optimization approach used for maximization of the modularity. The method finds approximately maximal $Q$ without getting stuck in a local maxima.
+The algorithm uses the following steps
+\begin{itemize}
+	\item Change an assignment of a vertex
+	\item Calculate the change in modularity $\Delta Q$
+	\item If $\Delta Q \geq 0$, accept the change
+	\item If $\Delta Q < 0$, accept the change with probability $p = \exp\left(\frac{\Delta Q}{T}\right)$, where $T$ is the "temperature"
+	\item The "temperature" decays with time in:
+	      \begin{itemize}
+		      \item Geometric manner - $T_{k+1} = \alpha T_k$, where $\alpha in [0.9, 0.999]$
+		      \item Linear manner
+		      \item Adaptive manner
+	      \end{itemize}
+\end{itemize}
+
 \subsection{Genetic algorithm}
-Successive generations and fitness function which cuts off worse older generations
+\begin{itemize}
+	\item Generate an initial seed with semi-random partitions
+	\item Select which partitions continue into the next generation - modularity evaluation of partitions
+	\item Crossover selected partitions
+	\item Mutation - random variation keeps diversity
+\end{itemize}
+
+
 \subsection{Greedy algorithm}
 Starts from individual nodes. Joins them together so that modularity is maximized.\\
 In the next step it joins the communities from previous step.\\
@@ -133,12 +148,17 @@ Only algorithm the sort of works on very large networks $O(n \log^2n)$.
 
 
 \section{Describe the algorithm using betweenness centrality for community detection. How does the Radicci algorithm differ from it?}
-Betweenness is measure how many shortest path between edges go through a node.\\
-In each step remove the edge with a largest betweenness centrality. Recalculate betweenness centrality.\\
+Betweenness is measure how many shortest path between edges go through a node.
+The vertices that connect communities tend to have higher betweenness centrality.
 
-Complexity  $O(mn^2 + nm^2)$. On a sparse graph $O(n^3)$
+In each step remove the edge with a largest betweenness centrality. Recalculate betweenness centrality.
+Repeat the steps until there are no edges remaining - choose which step had the highest modularity.
 
-Radicci modification finds if an edge is a part of a short loop (4 edges). Works well if the graph has a lot of short loops (social networks). Technical networks usually avoid short loops.
+Complexity $O(mn^2 + nm^2)$. On a sparse graph $O(n^3)$
+
+Radicci modification finds if an edge is a part of a short loop (4 edges).It has been empirically found, that edges connecting communities
+are often not parts of short loops.
+Works well if the graph has a lot of short loops (social networks). Technical networks usually avoid short loops.
 
 Ends only after avery single vertex is separated. It is up to us to choose which division has maximal Modularity.
 
@@ -154,22 +174,30 @@ Ends only after avery single vertex is separated. It is up to us to choose which
 \end{itemize}
 
 \section{Define hierarchical clustering. What is a dendrogram? Explain the similarity-based hierarchical clustering with single-, complete- and average-linkage clustering.}
-dendogram - tree like structure
-Ends only after avery single vertex is separated. It is up to us to choose which division has maximal Modularity.
+Dendogram - tree like structure which shows how the network is separated. In the root, the whole graph is a single cluster. In each
+level, the cluster is separated into 2. The lower in the Dendogram, the more separated the network is.
+It is then up to us to choose which division has maximal Modularity.
 
-Start with vertices. Connect the vertices that are most similar. Generalize the similarity to similarity between clusters
+Betweenness centrality and Radicci methods started with the whole graph and gradually separated the network into single vertices. Similarity based
+clustering starts with single vertices and connects them with most similar. Then it does the same for the created communities (tuples of vertices) etc.
+The algorithm ends with the whole network in a single community. Again, we then evaluate at which level of the Dendogram was the modularity maximal.
+
+For similarity clustering we need to define similarity of 2 vertices - (for example hierarchical equivalence, structural equivalence)
+and then we need to generalize how to calculate similarity for communities:
 \begin{itemize}
-	\item minimal similarity of 2 vertices each in one cluster
-	\item maximum similarity
-	\item average similarity
+	\item minimal similarity of 2 vertices each in one cluster - $O(1)$
+	\item maximum similarity of 2 vertices each in one cluster - $O(1)$
+	\item average similarity - relatively easy to recalculate - $O(1)$
+	\item etc.
 \end{itemize}
+The $O(1)$ complexity can be achieved when storing previous similarities in a binary heap.
+Calculating the average of larger communities does not need to sum every single vertex, we only need to average the similarities of the previous connection - $O(1)$
 \begin{align}
-	\bar{a}_1     & = \frac{1}{n_1} \sum a_i                                          \\
-	\bar{a}_2     & = \frac{1}{n_2} \sum a_i                                          \\
-	\bar{a}_{1,2} & = \frac{1}{n_1 + n_2} \left(n_1 \bar{a}_1 + n_2 \bar{a}_2 \right)
+	\bar{a}_1     & = \frac{1}{n_1} \sum a_i                                           \\
+	\bar{a}_2     & = \frac{1}{n_2} \sum a_i                                           \\
+	\bar{a}_{1,2} & = \frac{1}{n_1 + n_2} \left(n_1 \bar{a}_1 + n_2 \bar{a}_2 \right).
 \end{align}
-
-Complexity $O(n^2 \log n)$
+With the binary heap addition and removal take $O(n \log n)$. The total complexity is $O(n^2 \log n)$.
 
 The result is usually tightly knit core and separate peripherals.
 
@@ -181,11 +209,11 @@ The result is usually tightly knit core and separate peripherals.
 \end{itemize}
 \subsection{Unspecified}
 \begin{itemize}
+	\item Repeated bisection
 	\item Simulated annealing
 	\item Genetic algorithm
 	\item Greedy algorithm
 	\item Hierarchical clustering
 \end{itemize}
-\TODO{This needs to be checked and reworked}
 
 \end{document}
