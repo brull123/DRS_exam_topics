@@ -2,14 +2,15 @@
 
 \begin{document}
 
-\lecture{Lecture 12}
+\lecture{Lecture 12} % Video lecture 10
 \section{Explain the difference between site and bond percolation.}
 Percolations are stochastic processes. We distinguish between site and bond percolations which correspond to random removal of vertices or edges from a graph.
 \begin{itemize}
 	\item Site percolation - vertices together with all their pertaining edges, are removed from the graph randomly with probability $p$
 	\item Bond percolation - edges are removed from the network randomly with probability $p$
 \end{itemize}
-We observe how is the network affected.
+We remove vertices or edges from the graph with increasing probability and observe how is the network affected.
+The expected amount of removed vertices/edges is $np/mp$.
 \begin{itemize}
 	\item Phase transition - network transitions abruptly from being connected to being a set of disconnected components. The transition happens for some probability $p$
 \end{itemize}
@@ -24,16 +25,20 @@ highest-degree vertices can be extremely detrimental - attacking a hub.
 
 \section{Describe a few examples of fully mixed epidemics models, e.g. SI, SIR, SIS, SEIR.}
 Used for purposes of mathematical description of epidemics.
+
 \subsection{SI}
 \begin{itemize}
 	\item Divides the population into two groups susceptible of size $S$ and infected of size $X$. The fraction of the total population is denoted by $s$ and $x$.
+	\item The size of these groups cannot be negative
 	\item No entry or departure of individuals from the population is assumed
+	\item The system is compartmental - $x \in \R^n_{+},\: \dot{x} = f(x), \: x_i = 0 \Rightarrow f_i(x_i) \geq 0$ - (in this context $x$ is a general vector, not the fraction of infected)
 \end{itemize}
 The system is modelled as
 \begin{align}
 	\dot{s} & = -\beta s x \\
 	\dot{x} & = \beta s x.
 \end{align}
+The coefficient $\beta$ represents the probability of a single infected infecting a susceptible individual. The probability of an infected person meeting a susceptible person is given by the sizes of each of the groups.
 With constraint $s+x = 1$ the dynamics are reduced to a one dimensional system
 \begin{align}
 	\dot{x} & = \beta (1-x) x,
@@ -42,6 +47,7 @@ which has a closed form solution
 \begin{align}
 	x(t) & = \frac{x(0)\exp(\beta t)}{1 - x(0) + x(0) \exp(\beta t)}.
 \end{align}
+
 \subsection{SIR}
 This model adds a group of recovered subpopulation of size $R$. The model is
 \begin{align}
@@ -50,6 +56,7 @@ This model adds a group of recovered subpopulation of size $R$. The model is
 	\dot{r} & = \gamma x.
 \end{align}
 The model does not have a closed form solution.\\
+
 \subsection{SIS}
 The SIS model allows for recovered individuals to be infected again and so it is modelled as
 \begin{align}
