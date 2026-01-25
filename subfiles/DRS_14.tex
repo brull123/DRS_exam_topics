@@ -242,6 +242,12 @@ Using Lyapunov analysis of stability
 
 % % -------------------------------------------------------------------------
 \section{What are the necessary topological conditions on the communication graph for consensus or synchronization? Explain the dynamical role of the Fiedler eigenvalue in continuous time single integrator consensus.}
-\TODO{Missing}
+The control input of a single integrator system for each vertex is $\dot{x} = - Lx$.
+The dynamics of the system is given by the graph Laplacian - if every eigenvalue (other then the 0) of the Laplacian has
+positive real part (the eigenvalues of -L need to be negative), the system will reach consensus. The zero eigenvalue corresponds to the consensus vector $L\bm{1} = 0$.
+If more than one eigenvalues are zero, the graph does not have a spanning tree and therefore there are at least two connected components which are not connected together.
+Each of the components will reach its own consensus but there will not be a common consensus.
+
+The rate of convergence is given by the second smallest eigenvalue - the Fiedler eigenvalue.
 
 \end{document}
