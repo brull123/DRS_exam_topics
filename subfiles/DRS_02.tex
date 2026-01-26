@@ -49,12 +49,12 @@ Unweighted graphs have binary adjacency matrices and weighted graphs have nonneg
 \end{align}
 \subsection{Bibliographic coupling}
 \begin{align}
-	B_{ij} & = \sum_{k} A_{ki} A_{ki} - \text{number of vertices which point both to the $i^{\rm th}$ and the $j^{\rm th}$ vertices}
+	B_{ij} & = \sum_{k} A_{ki} A_{kj} - \text{number of vertices which point both to the $i^{\rm th}$ and the $j^{\rm th}$ vertices}
 \end{align}
 
 \section{Explain the two one-mode projections of a bipartite network.}
 \begin{align}
-	P_{ij} & = \sum_{k} B_{ki}B{kj}, \quad P = B^T B,
+	P_{ij} & = \sum_{k} B_{ki}B_{kj}, \quad P = B^T B,
 \end{align}
 where $P_{ij}$ give the number of classes vertices $i$ and $j$ both belong to, with $P_{ii}$ being the number of classes which vertex $i$ alone belongs to.\\
 Alternatively

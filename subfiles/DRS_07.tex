@@ -4,22 +4,26 @@
 
 \lecture{Lecture 7}
 \section{Define assortative mixing with respect to scalar characteristics. Explain how does it differ from that for enumerative characteristics.}
-Assortatively mixed networks will have high in-degree nodes well connected to each other-comprising the network's core. The remaining
-low in-degree nodes are poorly connected to each other but usually connected to the core via some path.
-
-Dissortatively mixed networks usually consist of high-degree hubs weakly connected to each other but each connecting into many low in-degree nodes.
-TODO
-
 \subsection{Scalar characteristics}
-The assortative coefficient is defined as
+The assortative coefficient for scalar characteristics is defined as
 \begin{align}
 	r & = \frac{\sum_{i,j} \left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}{\sum_{i,j} \left(d_i \delta_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}
 \end{align}
+
+\subsection{Enumerative characteristics}
+The assortative coefficient for enumerative characteristics is defined as
+\begin{align}
+	\frac{Q}{Q_{\rm max}} & = \frac{\sum\left(A_{ij} - \frac{d_i d_j}{2m}\right) \delta (c_i, c_j)}{2m - \sum\frac{d_i d_j}{2m}\delta(c_i, c_j)}.
+\end{align}
+
+The difference is that enumerative characteristics allows for a finite set of distinct classes, while
+scalar characteristics allows for a continuum of values and calculates the correlation between the values at the ends of edges rather then whether the classes are the same.
 
 \section{Define the modularity matrix for undirected networks.}
 \begin{align}
 	B_{i,j} & = A_{i,j} - \frac{d_i d_j}{2m.}
 \end{align}
+It assumes an undirected graph. The matrix is always nonsparse regardless of the graph topology and it is used to calculate both scalar and enumerative characteristics.
 
 \section{Explain assortative mixing with respect to the degree. Discuss what are its implications on the network topology.}
 Assortatively mixed networks will have high in-degree nodes well connected to each other-comprising the network's core. The remaining
@@ -33,11 +37,18 @@ A statistical characterization of a large network uses power-law degree distribu
 
 Probability $p_k$ of finding a vertex of degree $d_i = k$ is defined as
 \begin{align}
-	\ln p_k & = - \alpha \ln k + C.
+	p_k     & \sim k^{- \alpha}
+	\ln p_k & \sim - \alpha \ln k + C.
 \end{align}
 The distribution allows for high number of low-degree nodes and very low number of high-degree nodes.
 This is the case of the Internet with a low number of hubs and high amount of users connecting to the hubs.
-\TODO{Explain how to calculate their moments}
+
+\subsection{Moments}
+The expected value can be calculated as
+\begin{align}
+	\mathbb{E}\left[d_i\right] & = \sum_{k = 0}^{\infty} k p_k = \sum_k k k^{-\alpha} = \sum_k k^{1-\alpha}.
+\end{align}
+The sum converges for $\alpha > 2$.
 
 \section{Explain the effect of top heavy distribution of vertex degrees for the networks.}
 A minor proportion of highly connected vertices accounts for a sizeable portion of the graph edges.

@@ -25,19 +25,21 @@ Transitivity measures how strongly a network tends to form triangles - weather "
 	C_i & = \frac{\text{number of pairs of neighbors of vertex} \: i \:  \text{that are connected}}{\text{number of pairs of neighbors of vertex}\:i}
 \end{align}
 
+\pagebreak
 \section{Explain the concept of reciprocity and how it relates to loops of length two.}
 \begin{definition}{Reciprocity}{}
 	A global measure of the graph $r$
 	\begin{align}
 		r & = \frac{1}{m} \sum_{i,j} A_{ij}A_{ji}.
 	\end{align}
-	Equals to the number of 2-loops normalized to the number of edges.
+	Equals to the number of 2-loops normalized to the number of edges.\\
+	It gives a probability that if there is an edge $(i,j)$ there is also an edge in the opposite direction $(j,i)$.
 \end{definition}
 
 \section{Define structural balance for networks with signed edges. Show that structurally balanced network is certainly clusterable (Harrary's theorem).}
 Signed edges carry a positive or negative sign.\\
 A graph is structurally balanced if all loops in the graph have even number of negative edges.\\
-A signed network is clusterable if it is possible to clearly partition it into two subsets of vertices such taht all edges betwwen certices within each subset are positive while all the edges between the two subsets are negative.\\
+A signed network is clusterable if it is possible to clearly partition it into two subsets of vertices such that all edges between vertices within each subset are positive while all the edges between the two subsets are negative.\\
 Clustering algorithm - color the vertices along paths using 2 colors, change the color when traversing a negative edge.
 After finishing the loop, the color changed even times - so it has changed to the original color of the first vertex in the loop.
 
@@ -49,7 +51,7 @@ A triangle with every edge negative. Each vertex is a cluster of 1 node. There a
 
 
 \section{Explain vertex similarity.}
-A measure defined between two vertices
+A measure defined between two vertices. There are two types of similarity
 \begin{itemize}
 	\item Structural equivalence
 	\item Regular equivalence
@@ -73,20 +75,26 @@ Outcome of an iterative process
 
 \section{Define homophily and assortative mixing in networks.}
 \subsection{Homophily}
-A global property based on similarity\\
+A global property based on similarity
 \begin{itemize}
 	\item Enumerative characteristics
 	\item Scalar characteristics
 \end{itemize}
+It shows how likely are similar nodes to form ties.
 \subsubsection{Enumerative characteristics}
-The amount of edges between the nodes of the same class
+Defines a finite number of distinct classes $c_i$.
+
+We count the edges between the nodes of the same class
 \begin{align}
 	\sum_{i,j} \delta(c_i, c_j) = \sum_{i,j} A_{ij}\delta(x_i, c_j)
 \end{align}
 This number is compared to the number expected if connections were made at random
 \begin{align}
-	\frac{1}{2} \sum_{i,j} \delta(c_i, c_j) = \sum_{i,j} A_{ij}\delta(x_i, c_j) -
-	\frac{1}{2} \sum_{i,j} \frac{d_i d_j}{2m} \delta (c_i, c_j).
+	\frac{1}{2} \sum_{i,j} \delta(c_i, c_j).
+\end{align}
+The difference is
+\begin{align}
+	\frac{1}{2}\sum_{i,j} A_{ij}\delta(x_i, c_j) - \frac{1}{2} \sum_{i,j} \frac{d_i d_j}{2m} \delta (c_i, c_j).
 \end{align}
 The modularity is a global property defined as
 \begin{align}
@@ -94,15 +102,34 @@ The modularity is a global property defined as
 \end{align}
 A new algebraic object nonsparse modularity matrix $B$ describes network structure
 \begin{align}
-	B_{i,j} & = A_{i,j} - \frac{d_i d_j}{2m.}
+	B_{i,j} & = A_{i,j} - \frac{d_i d_j}{2m}.
 \end{align}
 The maximal value of modularity equals
 \begin{align}
 	Q_{\rm max} & = \frac{1}{2} \left(2m - \sum_{i,j} \frac{d_i d_j}{2m} \delta(c_i, c_j)\right)
 \end{align}
 
-\subsection{Scalar characteristics}
+\subsubsection{Scalar characteristics}
+There are no distinct classes but rather a continuum of different values.
+Scalar characteristics relates to covariance of characteristics (value) found on both ends of edges in the graph. It measures how correlated are the values of the vertices at the ends of a single edge.
+For each edge $(i,j) \in E$ there are scalar values $x_i, x_j$ assigned to vertices $i, j$.
+The mean value is
 \begin{align}
 	\mu & = \frac{\sum_{i,j} A_{ij} x_i}{\sum_{i,j} A_{ij}} = \frac{\sum_i d_i x_i}{\sum_i d_i} = \frac{1}{2m} \sum_i d_i x_i
 \end{align}
+
+The covariance is defined as
+\begin{align}
+	{\rm cov}(x_i, x_j) & = \frac{\sum_{i,j}A_{ij}(x_i - \mu)(x_j - \mu)}{\sum_{i,j}A_{ij}}        \\
+	{\rm cov}(x_i, x_j) & = \frac{1}{2m} \sum{i,j}\left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j.
+\end{align}
+
+\subsection{Assortative mixing}
+For example: based on node in-degree.
+Shows how similar nodes (in this case nodes with the same in-degree) are connected together.
+
+Assortatively mixed network will have a high in-degree nodes connected with each other. The remained of nodes will be poorly connected to each other and usually even to the core by some path.
+
+Dissortatively mixed network will have high in-degree nodes (hubs) connected to vast amount of low in-degree nodes.
+
 \end{document}

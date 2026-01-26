@@ -3,10 +3,20 @@
 \begin{document}
 \lecture{Lecture 5}
 \section{Define PageRank and modified PageRank.}
-\begin{definition}{Page Rank}{}
+\subsection{PageRank}
+\begin{definition}{PageRank}{}
 	Modified version of Katz centrality - normalized by its out-degree. Nodes pointing out to many other nodes have their importance proportionally discounted.
 	\begin{align}
 		x_i     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta     \\
+		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bm{1}\beta \\
+		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
+	\end{align}
+\end{definition}
+
+\subsection{Modified PageRank}
+\begin{definition}{Modified PageRank}{}
+	\begin{align}
+		x_i     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta_i   \\
 		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bar{\beta} \\
 		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
 	\end{align}
@@ -22,10 +32,17 @@
 	\begin{align}
 		y_i & = \beta \sum_{j} A_{ij}x_j
 	\end{align}
+	In vector form
+	\begin{align}
+		x      & = \alpha A y, &\quad y &= \beta A^T x                           \\
+		x      & = \alpha A  \beta A^T x, &\quad y &= \beta A^T \alpha A y       \\
+		AA^T x & = (\alpha \beta)^{-1} x, &\quad A^T A y &= (\beta \alpha)^{-1}y.
+	\end{align}
+	Meaning that the resulting hub and authority centralities are given by the eigenvectors of matrices $AA^T$ and $A^TA$.
 \end{definition}
-\subsection{Closeness centrality}
 
 \section{Define closeness centrality and discuss different variants thereof.}
+\subsection{Closeness centrality}
 \begin{definition}{Closeness centrality}{}
 	Closeness centrality defines the importance of a node in a graph as being measured by how close it is to all other nodes in the graph.
 	It is a local path-based measure
@@ -66,7 +83,7 @@
 \end{definition}
 \subsection{k-plex}
 \begin{definition}{$k$-plex}
-	A $k$-plex (if size $n$) is a maximal subset of $n$ vertices such that each one member is connected to at least $n-k$ others in that subset.
+	A $k$-plex (of size $n$) is a maximal subset of $n$ vertices such that each one member is connected to at least $n-k$ others in that subset.
 \end{definition}
 \subsection{k-core}
 \begin{definition}{$k$-core}{}

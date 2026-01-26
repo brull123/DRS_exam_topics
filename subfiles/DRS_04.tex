@@ -3,7 +3,7 @@
 \begin{document}
 \lecture{Lecture 4}
 \section{Define the Metzler matrix.}
-Metzler matrix is a matrix, where all off-diagonal components are nonnegative, $M_ij \geq 0, \: i \neq j$.
+Metzler matrix is a matrix, where all off-diagonal components are nonnegative, $M_{ij} \geq 0, \: i \neq j$.
 A dynamical system modelled by a Metzler matrix  $\dot{x} = Mx$ has its dynamical trajectories contained in the positive orthant $\R^n_{+}$, if the initial values are from the orthant.\\
 The matrix can be written as
 \begin{align}
@@ -25,15 +25,21 @@ A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
 
 \section{Explain how the geometric multiplicity of eigenvalues differ from the algebraic one.}
 \subsection{Algebraic multiplicity}
-If 0 is a simple eigenvalue, then:
-\begin{itemize}
-	\item The graph is strongly connected
-	\item The Frobenius form has only one irreducible diagonal block = the entire matrix
-	\item There exists a spanning tree of the graph
-	\item In case of a spanning forest, the multiplicity of the Laplacian's zero is the minimum number of trees which together span all vertices in the graph
-\end{itemize}
+\begin{definition}{Algebraic multiplicity of an eigenvalue}{}
+	Algebraic multiplicity of the eigenvalue $\lambda$ is how many times it appears as a root of the characteristic polynomial
+	\begin{align}
+		p(s) &= \det\left(sI - A\right).
+	\end{align}
+\end{definition}
+
 \subsection{Geometric multiplicity}
-\TODO{Missing}
+\begin{definition}{Geometric multiplicity of an eigenvalue}{}
+	Geometric multiplicity of the eigenvalue $\lambda$ is the dimension of the eigenspace
+	\begin{align}
+		gm(\lambda) &= \dim \left(\ker \left(A - I \lambda\right) \right).
+	\end{align}
+	It gives the amount of linearly independent eigenvectors associated with the eigenvalue $\lambda$.
+\end{definition}
 
 \section{Explain the meaning of the geometric multiplicity of a zero eigenvalue for graph Laplacians.}
 By construction, the Laplacian matrix always has at least one zero eigenvalue. The amount of zero eigenvalues of the graph Laplacian is the amount of spanning trees in the spanning forest of the graph = number of strongly connected components of the graph.
@@ -70,7 +76,6 @@ Then it is true that
 	p^T &= \bm{1}^T, \\
 	\bm{1}^T L &= 0.
 \end{align}
-\TODO{Missing}
 
 \section{Define a balanced graph.}
 A balanced graph is a graph where the indegree and outdegree of each vertex are equal. An example of a balanced graph is an undirected graph.
@@ -89,10 +94,9 @@ Degree centrality is a measure of the graph.
 	Eigenvector centrality measures the importance of a node as a function of the importance of its neighbors. If a node is connected to
 	highly important nodes, it will have a higher eigenvector centrality compared to the less important nodes.
 	\begin{align}
-		x_i - x_i' & = \sum_{j} A_{ij} x_j \\
-		x'         & = A x,
+		x_i' & = \sum_{j} A_{ij} x_j \\
+		x'         & = A x
 	\end{align}
-	where $x'$ is the eigenvector centrality of the neighbors.\\
 	The algorithm of obtaining the eigenvector centrality of a graph is iterative.\\
 	\begin{itemize}
 		\item Choose an initial seed $x(0) = c^T V$, where $V$ is the matrix of eigenvectors of the adjacency matrix and $c$ is a weighing vector.
@@ -108,9 +112,12 @@ Degree centrality is a measure of the graph.
 \begin{definition}{Katz centrality}{}
 	Generalization of the eigenvector centrality
 	\begin{align}
-		x_i         & = \alpha \sum_j A_{ij} x_j + \beta             \\
+		x_i         & = \alpha \sum_j A_{ij} x_j + \beta,
+	\end{align}
+	which allows to calculate the centrality in a non-iterative manner
+	\begin{align}
 		x           & = \left(I - \alpha A\right)^{-1} + \bar{\beta} \\
-		\bar{\beta} & = \bm{1}\beta
+		\bar{\beta} & = \bm{1}\beta.
 	\end{align}
 \end{definition}
 \end{document}
