@@ -180,14 +180,21 @@ In matrix notation it can be rewritten using the Laplacian
 \end{align}
 
 \subsection{Leader}
-We can add an uncontrolled leader $x_o$ and then add a pinning control term to the control input for every other agent
+We add a leader as a term of the weighted average
 \begin{align}
-	\tilde{u}_i(k) & = \frac{1}{1+d_i+g_i} \left[\sum_j e_{ij} \left[x_j(k) - x_i(k)\right] + g \left[x_0(k) - x_i(k)\right]\right]
+	x_i(k+1) & = \frac{1}{1 + d_i + g_i} \left[x_i(k) + g_ix_0 + \sum_{j} e_{ij} x_j(k)\right].
 \end{align}
-or in matrix notation
+In matrix notation that would be
 \begin{align}
-	\tilde{u}(k) & = -(I + D + G)^{-1}(L+G)\left[x(k) - \bm{1}_N x_0\right].
+	x(k+1) & = (I + D + G)^{-1} \left[(I + E)x(k) + G \bm{1} x_0\right].
 \end{align}
+
+In discrete time, we can also define synchronization error
+\begin{align}
+	\delta_i(k) & = x_i(k) - x(0)
+	\delta(k+1) & = (I + D + G)^{1} (I + E)\delta(k).
+\end{align}
+The system is asymptotically stable if the graph of followers is pinned to the root of a spanning tree or more generally to all roots of a spanning forest.
 
 % -------------------------------------------------------------------------
 \section{Set up the dynamical equations for continuous-time homogeneous LTI agents using local neighborhood error signal for state synchronization.}
