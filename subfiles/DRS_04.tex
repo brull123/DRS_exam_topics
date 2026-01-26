@@ -15,12 +15,12 @@ The Z-matrix has all off-diagonal elements non-positive, $Z_{ij} \leq 0, \: i \n
 $-Z$ is Metzler.
 
 A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
-\begin{itemize}
-	\item A Z-matrix $E = sI - A$ is singular M-matrix if all its principal minors are nonnegative
-	\item A Z-matrix $E = sI - A$ is nonsingular M-matrix if all its principal minors are positive
-	\item If $E$ is a singular M-matrix, then $s\geq \rho(A)$ and $-E$ is a Metzler matrix
-	\item $\dots$
-\end{itemize}
+% \begin{itemize}
+% 	\item A Z-matrix $E = sI - A$ is singular M-matrix if all its principal minors are nonnegative
+% 	\item A Z-matrix $E = sI - A$ is nonsingular M-matrix if all its principal minors are positive
+% 	\item If $E$ is a singular M-matrix, then $s\geq \rho(A)$ and $-E$ is a Metzler matrix
+% 	\item $\dots$
+% \end{itemize}
 
 
 \section{Explain how the geometric multiplicity of eigenvalues differ from the algebraic one.}
@@ -28,7 +28,7 @@ A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
 \begin{definition}{Algebraic multiplicity of an eigenvalue}{}
 	Algebraic multiplicity of the eigenvalue $\lambda$ is how many times it appears as a root of the characteristic polynomial
 	\begin{align}
-		p(s) &= \det\left(sI - A\right).
+		p(s) & = \det\left(sI - A\right).
 	\end{align}
 \end{definition}
 
@@ -36,7 +36,7 @@ A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
 \begin{definition}{Geometric multiplicity of an eigenvalue}{}
 	Geometric multiplicity of the eigenvalue $\lambda$ is the dimension of the eigenspace
 	\begin{align}
-		gm(\lambda) &= \dim \left(\ker \left(A - I \lambda\right) \right).
+		gm(\lambda) & = \dim \left(\ker \left(A - I \lambda\right) \right).
 	\end{align}
 	It gives the amount of linearly independent eigenvectors associated with the eigenvalue $\lambda$.
 \end{definition}
@@ -47,7 +47,7 @@ By construction, the Laplacian matrix always has at least one zero eigenvalue. T
 \section{Define the left zero eigenvector.}
 For any graph
 \begin{align}
-	L        & = D - A,
+	L & = D - A,
 \end{align}
 then
 \begin{align}
@@ -57,7 +57,7 @@ There must also exist
 \begin{align}
 	\exists p^T, \: p^T L & = 0,
 \end{align}
-a left eigenvector corresponding to the eigenvalue 0. 
+a left eigenvector corresponding to the eigenvalue 0.
 The elements $p_i$ of the left eigenvector $p$ are nonnegative
 \begin{align}
 	p_i \geq 0, \quad p \succeq 0.
@@ -68,13 +68,13 @@ For a strongly connected graph $\forall p_i, \: p_i > 0$.
 
 A weight-balanced graph has the following property
 \begin{align}
-	d_i^{in} & = d_i^{out}\\
-	L &= L^T.
+	d_i^{in} & = d_i^{out} \\
+	L        & = L^T.
 \end{align}
 Then it is true that
 \begin{align}
-	p^T &= \bm{1}^T, \\
-	\bm{1}^T L &= 0.
+	p^T        & = \bm{1}^T, \\
+	\bm{1}^T L & = 0.
 \end{align}
 
 \section{Define a balanced graph.}
@@ -95,7 +95,7 @@ Degree centrality is a measure of the graph.
 	highly important nodes, it will have a higher eigenvector centrality compared to the less important nodes.
 	\begin{align}
 		x_i' & = \sum_{j} A_{ij} x_j \\
-		x'         & = A x
+		x'   & = A x
 	\end{align}
 	The algorithm of obtaining the eigenvector centrality of a graph is iterative.\\
 	\begin{itemize}
@@ -112,11 +112,11 @@ Degree centrality is a measure of the graph.
 \begin{definition}{Katz centrality}{}
 	Generalization of the eigenvector centrality
 	\begin{align}
-		x_i         & = \alpha \sum_j A_{ij} x_j + \beta,
+		x_i & = \alpha \sum_j A_{ij} x_j +\beta,
 	\end{align}
 	which allows to calculate the centrality in a non-iterative manner
 	\begin{align}
-		x           & = \left(I - \alpha A\right)^{-1} + \bar{\beta} \\
+		x           & = \left(I - \alpha A\right)^{-1}\bar{\beta} \\
 		\bar{\beta} & = \bm{1}\beta.
 	\end{align}
 \end{definition}
