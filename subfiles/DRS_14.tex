@@ -22,6 +22,14 @@
 		y_0       & = C x_0
 	\end{align}
 \end{definition}
+\begin{definition}{Consensus}{}
+	Consensus is a state which is constant. After reaching the consensus, the agents remain it such state indefinitely.
+\end{definition}
+
+\begin{definition}{Synchronization}{}
+	If agents are synchronized, they have reached a common state, which evolves in time. After achieving synchronization,
+	the agents' states still evolve, but all in the same manner.
+\end{definition}
 
 \begin{definition}{Agents}{}
 	Agents are autonomous subsystems, with dynamics having a state description generally in $\R^n$ - $x_i \in \R^{n_i}, \: i = 1,\dots, N$.
@@ -31,7 +39,12 @@
 Each of the agents can be described by a general LTI system
 \begin{align}
 	\dot{x}_i & = Ax_i + Bu_i \\
-	y_i       & = Cx_i
+	y_i       & = Cx_i + Du_i
+\end{align}
+In general the systems may not be LTI
+\begin{align}
+	\dot{x}_i & = f(x_i, u_i)  \\
+	y_i       & = h(x_i, u_i).
 \end{align}
 
 The control problem for an multi-agent system is asymptotic state synchronization
@@ -44,6 +57,17 @@ The control problem for an multi-agent system is asymptotic state synchronizatio
 Heterogeneous agents assume that systems of individual agents may differ from each other, their states may differ in dimensions $x_i \in \R^{n_i},\: n_i \neq n_j$
 and therefore the state synchronization problem cannot be posed. Even if the dimensions were the same, the state variables may be different and it would make no sense to synchronize such different state variables.
 
+In the case of LTI systems
+\begin{align}
+	\dot{x}_i & = A_i x_i + B_i u_i  \\
+	y_i       & = C_i x_i + D_i u_i.
+\end{align}
+
+In general, the state-state equations are
+\begin{align}
+	\dot{x}_i & = f_i(x_i, u_i)  \\
+	y_i       & = h_i(x_i, u_i).
+\end{align}
 
 Instead, the control goal is asymptotic synchronization of outputs.
 \begin{align}
@@ -83,18 +107,20 @@ This can be written in matrix notation using the Laplacian
 	            \end{bmatrix}^T
 \end{align}
 
-\subsection{Leader}
+\subsection{Leader - Pinning control}
 A leader is an uncontrolled agent
 \begin{align}
 	\dot{x}_0 & = A x_0  \\
 	y_0       & = C x_0.
 \end{align}
 
-The control of other agents is augmented with
+The control of other agents is augmented with a non-negative pinning gain
 \begin{align}
 	g_i(x_0 - x_i),
 \end{align}
 where $g_i$ can be either binary element signifying whether the $i^{\rm th}$ agent is connected to the leader or it can be a control gain same as with $e_{ij}$.
+Usually $g_i$ is nonzero only for a small fraction of nodes. The following of the leader is then propagated through the graph structure to
+other vertices.
 
 The total control input is then
 \begin{align}
@@ -105,25 +131,44 @@ which can again be written in matrix notation
 	\dot{x} & = - (L + G) (x - \bm{1}_N x_0).
 \end{align}
 
+We can define a synchronization error
+\begin{align}
+	\delta_i     & = x_i - x_0        \\
+	\dot{\delta} & = -(L + G) \delta.
+\end{align}
+
+The matrix $(L+G)$ is nonsingular and all eigenvalues have positive real part, therefore with pinning control, the synchronization will be achieved asymptotically.
+
 % -------------------------------------------------------------------------
 \section{Write the single-integrator leaderless consensus dynamics in discrete time. How to include a leader?}
 In discrete time the model of a single agent is
 \begin{align}
-	x_i(k+1) & = u_i(k).
+	x_i(k+1) & = u_i(k)
 \end{align}
-Cooperative local neighborhood signal for control is
+or in an alternative way
 \begin{align}
-	u_i(k) & = \frac{1}{1+d_i} \left[\sum_j e_{ij}(x_j(k) - x_i(k))\right] \\
-	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right],
+	x_i(k+1) & = x_i(k) + \tilde{u}_i(k).
 \end{align}
+In the first case, an uncontrolled system would immediately go to zero. In the latter, the uncontrolled system will
+retain its value.
+
+The consensus is reached by calculating the weighted average of the current state and the state of all neighbors.
+\begin{align}
+	u_i(k) & = \frac{1}{d_i+1} \left[x_i(k) + \sum_{j} e_{ij} x_j(k)\right],
+\end{align}
+% Cooperative local neighborhood signal for control is
+% \begin{align}
+% 	u_i(k) & = \frac{1}{1+d_i} \left[\sum_j e_{ij}(x_j(k) - x_i(k))\right] \\
+% 	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right],
+% \end{align}
 where $e_{ij}$ are elements of the adjacency matrix $E$.
 In compact notation the closed loop system is
 \begin{align}
 	x(k+1) & = (I + D)^{-1} (I + E)x(k),
 \end{align}
-where $D = diag(d_i)$.
+where $D = diag(d_i)$. If the graph has a spanning tree - if it is strongly connected, it will eventually converge to consensus.
 
-Perhaps a clearer way to write the equation is to define the input as
+Perhaps a clearer way to write the equation using the second definition of the input
 \begin{align}
 	x_i(k+1)       & = x_i(k) + \tilde{u}_i(k)                                       \\
 	\tilde{u}_i(k) & = - \frac{1}{1+d_i} \sum_j e_{ij} \left[x_i(k) - x_j(k)\right].
@@ -247,6 +292,8 @@ The dynamics of the system is given by the graph Laplacian - if every eigenvalue
 positive real part (the eigenvalues of -L need to be negative), the system will reach consensus. The zero eigenvalue corresponds to the consensus vector $L\bm{1} = 0$.
 If more than one eigenvalues are zero, the graph does not have a spanning tree and therefore there are at least two connected components which are not connected together.
 Each of the components will reach its own consensus but there will not be a common consensus.
+If the graph is weakly connected, then each of the strongly connected components will reach its own consensus and then slowly
+all vertices will reach a common consensus.
 
 The rate of convergence is given by the second smallest eigenvalue - the Fiedler eigenvalue.
 

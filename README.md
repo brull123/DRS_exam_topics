@@ -1,5 +1,5 @@
 # Dynamics and Control of Networks - Exam questions
-This repository provides answers to exam topics of a university course <a href="https://moodle.fel.cvut.cz/course/view.php?id=9608">Dynamics and Control of Networks</a> by <a href="https://control.fel.cvut.cz/en/node/725">doc. Kristian Hengster-Movric, Ph.D. </a> at Czech Technical Univeristy in Prague.
+This repository provides answers to exam topics of a university course <a href="https://moodle.fel.cvut.cz/course/view.php?id=9608">Dynamics and Control of Networks</a> by <a href="https://control.fel.cvut.cz/en/node/725">doc. Kristian Hengster-Movric, Ph.D. </a> at Czech Technical University in Prague.
 
 The document is based on the Lecture notes of the course and does not contain any additional information. The purpose of this work is to gather relevant information for each of the topics in one place.
 
