@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\lecture{Lecture 14}
+\lecture{Lecture 14} % Video lectures 12-13
 % -------------------------------------------------------------------------
 \section{Define the consensus/synchronization problem in states and outputs. Explain the difference between homogeneous and heterogeneous agents.}
 \begin{definition}{Consensus/synchronization problem}{}
@@ -156,11 +156,6 @@ The consensus is reached by calculating the weighted average of the current stat
 \begin{align}
 	u_i(k) & = \frac{1}{d_i+1} \left[x_i(k) + \sum_{j} e_{ij} x_j(k)\right],
 \end{align}
-% Cooperative local neighborhood signal for control is
-% \begin{align}
-% 	u_i(k) & = \frac{1}{1+d_i} \left[\sum_j e_{ij}(x_j(k) - x_i(k))\right] \\
-% 	u_i(k) & = \frac{1}{1+d_i} \left[x_i(k) + \sum_j e_{ij}x_j(k)\right],
-% \end{align}
 where $e_{ij}$ are elements of the adjacency matrix $E$.
 In compact notation the closed loop system is
 \begin{align}
@@ -197,100 +192,219 @@ In discrete time, we can also define synchronization error
 The system is asymptotically stable if the graph of followers is pinned to the root of a spanning tree or more generally to all roots of a spanning forest.
 
 % -------------------------------------------------------------------------
+% Video lecture 13
 \section{Set up the dynamical equations for continuous-time homogeneous LTI agents using local neighborhood error signal for state synchronization.}
 A single agent has dynamics
 \begin{align}
 	\dot{x}_i & = A x_i + B u_i \\
 	y_i       & = C x_i.
 \end{align}
-We assume there is a leader present
-\begin{align}
-	\dot{x}_0 & = Ax_0 \\
-	y_0       & = Cx_0 \\
-	u_0 = 0.
-\end{align}
-Then the goal is $||x_i - x_0|| \rightarrow 0$.
+The agents are homogeneous and therefore the matrices $A, B, C, D$ are the same for every agent.
+The goal is either $\lVert x_i  - x_j\rVert \rightarrow 0$ in case there is no leader present, or if there is a leader present then
+the goal is $||x_i - x_0|| \rightarrow 0$.
 
-The distributed control is
+We assume that the leader is uncontrolled
 \begin{align}
-	u_i       & = cK\left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right]           \\
-	\dot{x}_i & = Ax_i + cBK \left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right],
+	\dot{x}_0 & = Ax_0  \\
+	y_0       & = Cx_0.
 \end{align}
-where $c > 0$ is a scalar gain.
+
+For leaderless configuration the control input is
+\begin{align}
+	u_i       & = K \left[\sum_j e_{ij}(x_j - x_i)\right]          \\
+	\dot{x}_i & = Ax_i + BK \left[\sum_j e_{ij}(x_j - x_i)\right],
+\end{align}
+where $K$ is a control gain. Unlike in single-integrator systems, here $x_i \in \R^n$, where $n$ is the order of a single agent.
+
+With leader following there is an addition of a pinning control
+\begin{align}
+	u_i       & = K\left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right]           \\
+	\dot{x}_i & = Ax_i + BK \left[\sum_j e_{ij}(x_j - x_i) + g_i(x_0 - x_i)\right],
+\end{align}
 
 In vector notation that is
 \begin{align}
-	\bm{x}            & =
+	\bm{x} & =
 	\begin{bmatrix}
 		x_1    \\
 		\vdots \\
 		x_N    \\
-	\end{bmatrix} \in \R^{nN}, \: x_i \in R^n                                                                           \\
-	\bm{u}            & =
+	\end{bmatrix} \in \R^{nN}, \: x_i \in R^n \\
+	\bm{u} & =
 	\begin{bmatrix}
 		u_1    \\
 		\vdots \\
 		u_N
-	\end{bmatrix} \in \R^{mN}, \: u_i \in R^m                                                                           \\
+	\end{bmatrix} \in \R^{mN}, \: u_i \in R^m.
+\end{align}
+With the use of Kronecker multiplication
+\begin{align}
+	I_n                            & \in \R^{n \times n}, \: I_p \in \R^{p \times p},\: A \in \R^{p \times p}, \: B \in \R^{n \times n} \\
+	I \otimes A                    & =
+	\begin{bmatrix}
+		A &        &   \\
+		  & \ddots &   \\
+		  &        & A
+	\end{bmatrix} \in \R^{np \times np}                                                                                                 \\
+	A \otimes I                    & =
+	\begin{bmatrix}
+		a_{11} I & \dots  & a_{1p} I \\
+		\vdots   & \ddots & \vdots   \\
+		a_{p1} I & \dots  & a_{pp} I
+	\end{bmatrix} \in \R^{pn \times pn}                                                                                                 \\
+	(I_n \otimes A)(B \otimes I_p) & = B \otimes A
+\end{align}
+
+The local neighborhood error can be written as one of the two following options
+\begin{align}
+	L \otimes I \bm{x} \\
+	(L + G) \otimes I \bm{x}.
+\end{align}
+We can then write the control input $u$ as
+\begin{align}
 	\bm{u}            & =
 	\begin{cases}
-		- L \otimes K \bm{x}\: \text{for swarming} \\
-		- (L+G) \otimes K (\bm{x} - \bm{1} \otimes x_0)\: \text{for leader following}
-	\end{cases}                                        \\
-	\bm{\dot{x}}      & = \left[(I_N \otimes A) - c L \otimes BK\right] \bm{x}                                          \\
-	\bm{\dot{\delta}} & = \left[(I_N \otimes A) - c (L+G) \otimes BK\right] \bm{\delta}, \: \text{for leader following}
+		-(I \otimes K)(L \otimes I) \bm{x} = - L \otimes K \bm{x}\: \text{for swarming} \\
+		-(I \otimes K)((L+G) \otimes I) \bm{x} = - (L+G) \otimes K (\bm{x} - \bm{1} \otimes x_0)\: \text{for leader following}
+	\end{cases} \\
+	\bm{\dot{x}}      & = \left[(I_N \otimes A) - c L \otimes BK\right] \bm{x}                                            \\
+	\bm{\dot{\delta}} & = \left[(I_N \otimes A) - c (L+G) \otimes BK\right] \bm{\delta},
 \end{align}
+where $c>0$ is a scalar gain. We design the gain $K$ based on the dynamics of a single agent and the scalar gain $c$ based on the graph topology.
 The total system dynamic matrix has size $\R^{mN \times nN}$.
-
-We are looking for a transformation $T$
-\begin{align}
-	T^{-1} L T & = \Lambda,
-\end{align}
-where $\Lambda$ is triangular.
-\begin{align}
-	(T^{-1} \otimes I_n) (I_N \otimes A - c L \otimes B K)(T \otimes I_n) \\
-	T^{-1}T \otimes A - c T^{-1} L T \otimes B K                          \\
-	I_n \otimes A - c\Lambda  \otimes B K                                 \\
-	\text{On the diagonal of the matrix are blocks of} \: A - c \Lambda_{ii} B K \in \R^{n\times n}
-\end{align}
-Now we can analyze $N$ matrices of lower dimensionality then before. The eigenvalues of the blocks are the eigenvalues of the whole matrix.\\
-The diagonal elements of $\Lambda$ are the eigenvalues of the graph Laplacian. One is zero and the other ones have non-negative real part.
-The matrices on the block diagonal are $A - c \lambda_i B K \in \mathbb{C}^{n \times n}$.
-Now we analyze the matrix pencil
-\begin{align}
-	A -  \sigma B K, \sigma \in \mathbb{C}.
-\end{align}
-For which $\sigma$ is the matrix asymptotically stable. These create the synchronizing region.
-If we find a coupling gain $c$ such that all graph matrix eigenvalues end up in a synchronizing region, we can guarantee synchronization of a multi agent system using the feedback gain $K$\\
-We require $(A,B)$ stabilizeable, $(A-BK)$ asymptotically stable for $\sigma = 1$.
-
-\subsection{Lyapunov analysis}
-\begin{align}
-	V(z)                                                         = z ^{\dagger} P z, \: P & = P^T > 0    \\
-	z ^{\dagger} [P (A - \sigma B K) + (A - \sigma B K)^{\dagger} P]z                     & = \dot{V}(z)
-\end{align}
 
 % -------------------------------------------------------------------------
 \section{Show how to use complex matrix pencils for investigating state synchronization of homogeneous agents.}
 \begin{warningbox}
 	Proof/Derivation is required as a part of the exam
 \end{warningbox}
-If eigenvalues of $L + G$ are such that all these diagonal blocks are stable, then the entire system is stable in a sense that it asymptotically reaches synchronization to the leader's trajectory.
-The stability of the total system is determined by stability of diagonal blocks,
+
+We are looking for a transformation $T$
 \begin{align}
-	A - c \lambda_j L B K.
+	T^{-1} L T     & = \Lambda\\
+	T^{-1} (L+G) T & = \Lambda,
+\end{align}
+where $\Lambda$ is triangular. The analysis is the same for both cases, so I will continue with swarming.
+
+If we apply such transformation on the system dynamic matrix we get
+\begin{align}
+	(T^{-1} \otimes I_n) (I_N \otimes A - c L \otimes B K)(T \otimes I_n).
+\end{align}
+The Kronecker multiplication properties give
+\begin{align}
+	T^{-1}T \otimes A - c T^{-1} L T \otimes B K \\
+	I_n \otimes A - c\Lambda  \otimes B K
+\end{align}
+The resulting matrix has triangular blocks on the diagonal. The blocks are
+\begin{align}
+	A - c \Lambda_{ii} B K \in \R^{n\times n}.
 \end{align}
 
-Given $(A,B)$, for a chosen feedback matrix $K$ find a guaranteed region in the complex plane $\sigma \in \mathbb{C}$, such that the complex matrix pencil $(A - \sigma B K)$ is stable - results in the synchronizing region.\\
-Then find the coupling gain $c > 0$ that pushes all the eigenvalues $\lambda_j(L + G)$ into that region.
+Now we can analyze $N$ matrices of lower dimensionality then before. The eigenvalues of the blocks are the eigenvalues of the whole matrix. If the eigenvalues of theses blocks are stable, we can
+conclude that the whole system is stable.
+
+The diagonal elements of $\Lambda_{ii}$ are the eigenvalues of the graph Laplacian.
+One is zero and the other ones have non-negative real part. If the graph has a spanning tree, then the other eigenvalues have strictly positive real part.
+
+The matrices on the block diagonal are $A - c \lambda_i B K \in \mathbb{C}^{n \times n}$.
+We can now ignore the graph topology and only analyze the stability of the matrix pencil.
+A metric pencil is a matrix polynomial of the first degree. In our case a polynomial of variable $\sigma \in \mathbb{C}$ with matrix coefficients.
+The matrix pencil is
+\begin{align}
+	A -  \sigma B K.
+\end{align}
+For which $\sigma$ is the matrix asymptotically stable. These create the synchronizing region.
+
+We want to find a feedback gain $K$ which stabilizes a single agent - we want to maximize the synchronizing region of a single agent. Then we want to find a scalar gain $c > 0$ which
+scales the eigenvalues of the graph Laplacian into the synchronizing region.
+
+We require $(A,B)$ stabilizeable.
+Also that $(A-BK)$ asymptotically stable for $\sigma = 1$ - that is there exists a $K$ such that $\sigma = 1$ is in the synchronizing region.
 
 % -------------------------------------------------------------------------
 \section{Show that with the distributed feedback gain designed from the single-agent Algebraic Riccati Equation the resulting synchronizing region is an unbounded left-hand half-plane in the complex plane.}
 \begin{warningbox}
 	Proof/Derivation is required as a part of the exam
 \end{warningbox}
-Using Lyapunov analysis of stability
-\TODO{Missing}
+
+\subsection{Lyapunov analysis}
+For continuous time the Lyapunov function is
+\begin{align}
+	V(z) & = z^{\dagger} P z,\: z \in \mathbb{C}, \: P = P^T \succ 0,\: P \in \R^{n \times n}.
+\end{align}
+Here $z^{\dagger}$ stands for Hermitian adjoint - transposed and complex conjugate.
+\begin{align}
+	z            & = \begin{bmatrix}
+		                 z_1    \\
+		                 \vdots \\
+		                 z_n
+	                 \end{bmatrix}, \:
+	z^{\dagger} =
+	\begin{bmatrix}
+		\bar{z}_1 & \dots & \bar{z}_n
+	\end{bmatrix}, \:{\rm where}                                               \\
+	z_i          & = a + bi, \: \bar{z}_i = a - bi                              \\
+	z^{\dagger}z & = \sum_i \bar{z}_i z_i = \sum_i |z_i|^2 = \lVert z \rVert^2.
+\end{align}
+
+The time derivative of the Lyapunov function is
+\begin{align}
+	\dot{V} & = z^{\dagger}\left[\left(A - \sigma B K \right)^{\dagger} P + P \left(A - \sigma B K \right)\right]z.
+\end{align}
+
+The matrix can be modified to obtain
+\begin{align}
+	\left(A - \sigma B K\right)^{\dagger} P + P \left(A - \sigma B K \right) & = A^T P + P A -(\sigma B K)^{\dagger} P - P (\sigma B K)                                     \\
+	                                                                         & = A^T P + P A - K^T B^T \bar{\sigma}^T P - P \sigma B K.                    \label{eq:input}
+\end{align}
+We chose the feedback gain
+\begin{align}
+	K & = R^{-1} B^T P
+\end{align}
+And substitute into \eqref{eq:input}
+\begin{align}
+	\left(A - \sigma B K\right)^{\dagger} P + P \left(A - \sigma B K \right) & = A^T P + P A - (R^{-1} B^T P)^T B^T \bar{\sigma}^T P - P \sigma B R^{-1} B^T P \\
+	                                                                         & = A^T P + P A - P B R^{-1} B^T \bar{\sigma}^T P - \sigma P B R^{-1} B^T P       \\
+	                                                                         & = A^T P + P A - (\bar{\sigma}^T + \sigma) P B R^{-1} B^T P.
+\end{align}
+Since $\sigma \in \mathbb{C}$ is a scalar complex number, the transpose is equal to itself.
+\begin{align}
+	\left(A - \sigma B K\right)^{\dagger} P + P \left(A - \sigma B K \right) & = A^T P + P A - (\bar{\sigma} + \sigma) P B R^{-1} B^T P                \\
+	                                                                         & = A^T P + P A - 2\Re(\sigma) P B R^{-1} B^T P                           \\
+	                                                                         & = A^T P + P A - P B R^{-1} B^T P + (1 - 2\Re(\sigma)) P B R^{-1} B^T P.
+\end{align}
+Now we substitute from ARE
+\begin{align}
+	A^T P + P A + Q - P B^{-1} R B^T P & = 0   \\
+	A^T P + P A - P B^{-1} R B^T P     & = -Q.
+\end{align}
+We obtain
+\begin{align}
+	\left(A - \sigma B K\right)^{\dagger} P + P \left(A - \sigma B K \right) & =
+	-Q +(1 - 2\Re(\sigma)) P B R^{-1} B^T P.
+\end{align}
+The resulting matrix is negative definite for $\Re (\sigma) > \frac{1}{2}$ meaning the synchronizing region is a right half-plane.
+
+Every positive eigenvalue of the graph Laplacian can be multiplied by $c$ such that
+\begin{align}
+	c~\Re({\lambda_i})~>~\Re({\sigma})~>~\frac{1}{2}.
+\end{align}
+This gives us that the scalar gain $c$ needs to satisfy
+\begin{align}
+	c > \frac{1}{2 \Re{(\min \lambda_i(L)_{>0})}}.
+\end{align}
+In case of leader following
+\begin{align}
+	c > \frac{1}{2 \Re{(\min \lambda_i(L+G))}}.
+\end{align}
+The condition is only a sufficient condition, in fact the stabilizing region is a bit larger.
+Fig. \ref{fig:synchronizing_region} show an example of the synchronizing region.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{Figures/synchronizing_region.png}
+	\caption{Synchronizing region}
+	\label{fig:synchronizing_region}
+\end{figure}
 
 % % -------------------------------------------------------------------------
 \section{What are the necessary topological conditions on the communication graph for consensus or synchronization? Explain the dynamical role of the Fiedler eigenvalue in continuous time single integrator consensus.}
