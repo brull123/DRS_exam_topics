@@ -32,7 +32,7 @@ where $c_i$ are the community labels.
 By definition
 \begin{align}
 	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_i}{2m}\sum_{j} d_j = 0, \: \text{}         \\
-	\sum_{j} B_{ij} & = \sum_{j} A_{ij} - \frac{d_j}{2m}\sum_{i} d_i = d_j^{out} - d_j^{in},
+	\sum_{i} B_{ij} & = \sum_{i} A_{ij} - \frac{d_j}{2m}\sum_{i} d_i = d_j^{out} - d_j^{in},
 \end{align}
 which is also equal to zero on undirected and balanced graphs.
 
@@ -46,10 +46,10 @@ We define a vector $s \in \R^n$ such that
 \end{align}
 With the help of $s_i$ vertex labels one can construct the expression
 \begin{align}
-	\frac{1}{2}(1 - s_i s_j) & =
+	\frac{1}{2}(1 + s_i s_j) & =
 	\begin{cases}
-		1 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
-		0 \:\text{if} \:(i,j) \:\text{vertices are in the same group}.
+		0 \:\text{if} \:(i,j) \:\text{vertices are in different groups} \\
+		1 \:\text{if} \:(i,j) \:\text{vertices are in the same group}.
 	\end{cases}
 \end{align}
 

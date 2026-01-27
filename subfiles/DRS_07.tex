@@ -5,7 +5,7 @@
 \lecture{Lecture 7}
 \section{Define assortative mixing with respect to scalar characteristics. Explain how does it differ from that for enumerative characteristics.}
 \subsection{Scalar characteristics}
-The assortative coefficient for scalar characteristics is defined as
+The assortative coefficient for scalar characteristics is defined as the true covariance over the covariance in the perfect case, where $x_i = x_k$
 \begin{align}
 	r & = \frac{\sum_{i,j} \left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}{\sum_{i,j} \left(d_i \delta_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j}
 \end{align}
@@ -26,6 +26,10 @@ scalar characteristics allows for a continuum of values and calculates the corre
 It assumes an undirected graph. The matrix is always nonsparse regardless of the graph topology and it is used to calculate both scalar and enumerative characteristics.
 
 \section{Explain assortative mixing with respect to the degree. Discuss what are its implications on the network topology.}
+The assortative coefficient is defined as
+\begin{align}
+	r & = \frac{\sum_{ij} \left(A_{ij} - \frac{d_i d_j}{2m}\right) d_i d_j}{\sum_{ij} \left(\delta_{ij} d_i - \frac{d_i d_j}{2m}\right) d_i d_j}
+\end{align}
 Assortatively mixed networks will have high in-degree nodes well connected to each other-comprising the network's core. The remaining
 low in-degree nodes are poorly connected to each other but usually connected to the core via some path.
 
@@ -37,7 +41,7 @@ A statistical characterization of a large network uses power-law degree distribu
 
 Probability $p_k$ of finding a vertex of degree $d_i = k$ is defined as
 \begin{align}
-	p_k     & \sim k^{- \alpha}
+	p_k     & \sim k^{- \alpha} \\
 	\ln p_k & \sim - \alpha \ln k + C.
 \end{align}
 The distribution allows for high number of low-degree nodes and very low number of high-degree nodes.

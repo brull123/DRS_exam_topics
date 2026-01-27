@@ -113,9 +113,11 @@ The algorithm assigns all edges zero flow, then repeatedly, using BFS/Dijkstra, 
 
 Given a current flow $f$, the residual capacity is $r$
 \begin{align}
-	r(u,v) & = c(u,v) - f(u,v) \: \text{the residual capacity says how much more flow can be pushed through the edge}.
-	r(v,u) & = f(u,v) \: \text{gives a capacity to undo some flow, which may lead to increase in overall flow}
+	r(u,v) & = c(u,v) - f(u,v)\\
+	r(v,u) & = c(v,u) + f(u,v),
 \end{align}
+where the residual capacity says how much more flow can be pushed through the edge.
+The backward flow gives a capacity to undo some flow, which may lead to increase in overall flow.
 
 The flow of a path is given by a bottleneck $\Delta$- the minimal capacity of the edges in the path.
 We update the flow $f(u, v)$ of edges $(u,v)$ on the path as $f(u,v) = f(u,v) + \Delta$.

@@ -7,9 +7,13 @@
 \begin{definition}{PageRank}{}
 	Modified version of Katz centrality - normalized by its out-degree. Nodes pointing out to many other nodes have their importance proportionally discounted.
 	\begin{align}
-		x_i     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta     \\
-		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bm{1}\beta \\
-		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
+		x_i                     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta           \\
+		x                       & = \alpha A D^{out-1} x + \bm{1}\beta                           \\
+		(I - \alpha A D^{out-1}) x & = \bm{1}\beta                                                  \\
+		x                       & = (I - \alpha A D^{out-1})^{-1} \bm{1} \beta                   \\
+		x                       & = \left((D^{out} - \alpha A)D^{out-1}\right)^{-1} \bm{1} \beta\\
+		x                       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bm{1}\beta       \\
+		D^{out}                 & = {\rm diag}(\max{(d_i^{out}, 1)})
 	\end{align}
 \end{definition}
 
@@ -17,11 +21,12 @@
 \begin{definition}{Modified PageRank}{}
 	\begin{align}
 		x_i     & = \alpha \sum_j A_{ij} \frac{x_j}{d_j^{out}} + \beta_i   \\
-		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bar{\beta} \\
+		x       & = D^{out}\left(D^{out} - \alpha A\right)^{-1}\bm{\bar{\beta}} \\
 		D^{out} & = {\rm diag}(\max{(d_i^{out}, 1)})
 	\end{align}
 \end{definition}
 
+\pagebreak
 \section{Explain hubs and authorities and their relation to co-citation and bibliographic coupling.}
 \begin{definition}{Authories and Hubs}{}
 	An important authority has a lot of useful Hubs pointing to it.
@@ -34,9 +39,9 @@
 	\end{align}
 	In vector form
 	\begin{align}
-		x      & = \alpha A y, &\quad y &= \beta A^T x                           \\
-		x      & = \alpha A  \beta A^T x, &\quad y &= \beta A^T \alpha A y       \\
-		AA^T x & = (\alpha \beta)^{-1} x, &\quad A^T A y &= (\beta \alpha)^{-1}y.
+		x      & = \alpha A y,            & \quad y       & = \beta A^T x           \\
+		x      & = \alpha A  \beta A^T x, & \quad y       & = \beta A^T \alpha A y  \\
+		AA^T x & = (\alpha \beta)^{-1} x, & \quad A^T A y & = (\beta \alpha)^{-1}y.
 	\end{align}
 	Meaning that the resulting hub and authority centralities are given by the eigenvectors of matrices $AA^T$ and $A^TA$.
 \end{definition}
@@ -68,7 +73,7 @@
 	\begin{align}
 		x_i & = \sum_{s,t}n^i_{st},
 	\end{align}
-	where $n_st^i = 1$ if vertex $i$ lies in the geodesic path between vertices $s$ and $t$, and 0 otherwise.\\
+	where $n_{st}^i = 1$ if vertex $i$ lies in the geodesic path between vertices $s$ and $t$, and 0 otherwise.\\
 	If we define the total number of geodesic paths between vertices $s$ and $t$ as $g_{st}$, we can modify the definition of betweenness centrality as
 	\begin{align}
 		x_i & = \sum_{s,t}\frac{n^i_{st}}{g_{st}},
@@ -110,7 +115,6 @@
 \begin{definition}{Component}{}
 	A subset of graph vertices where each 2 vertices are connected by a path
 \end{definition}
-\subsection{k-component}
 
 \section{Define k-components and compare them with connected components.}
 \begin{definition}{$k$-component}{}

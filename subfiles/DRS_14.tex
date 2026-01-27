@@ -52,7 +52,6 @@ The control problem for an multi-agent system is asymptotic state synchronizatio
 	||x_i - x_j|| \rightarrow 0, \: \forall (i, j) \: {\rm as} \: t \rightarrow \infty
 \end{align}
 
-\pagebreak
 \subsection{Heterogeneous agents}
 Heterogeneous agents assume that systems of individual agents may differ from each other, their states may differ in dimensions $x_i \in \R^{n_i},\: n_i \neq n_j$
 and therefore the state synchronization problem cannot be posed. Even if the dimensions were the same, the state variables may be different and it would make no sense to synchronize such different state variables.
@@ -89,7 +88,7 @@ The elements can either be binary to signify which agents are connected to which
 
 The control input is available to each single-agent in a distributed way. This results in a closed-loop system
 \begin{align}
-	\dot{x}_i & = \sum_j e_{ij}(x_j - x_i) \\
+	\dot{x}_i & = \sum_j e_{ij}(x_j - x_i).
 \end{align}
 
 For every edge from/to agent $x_i$ (there are $d_i$ in total) the control input subtracts its value and for every neighbouring state its value is added.

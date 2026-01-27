@@ -40,7 +40,7 @@ normalization the iterate aligns with $v_1$.
 Let he eigenvalues of A be ordered $|\lambda_1 |> |\lambda_2 |\geq \dots \geq|\lambda_n|$.
 In each iteration the product is roughly
 \begin{align}
-	{x_k} = A^k x_0\approx \lambda_1^k(\text{component along $v_1$}) + \lambda_2 (\text{component along $v_2$}) + \dots.
+	{x_k} = A^k x_0\approx \lambda_1^k(\text{component along $v_1$}) + \lambda_2^k (\text{component along $v_2$}) + \dots.
 \end{align}
 The ratio $\frac{\lambda_2^k}{\lambda_1^k}$ gradually diminishes, only leaving the $v_1$ component.
 However, for that to happen the initial vector $x_0$ has to have a nonzero component along $v_1$. If the initial vector were orthogonal to $v_1$, the algorithm will fail.
@@ -50,12 +50,15 @@ In general we use similarity transforms and apply efficient algorithms on the ma
 
 For symmetric matrices $A=A^T$ there exists an orthogonal matrix $Q,\: Q^{-1} = Q^T$, such that $Q^T A Q = T$, where $T$ is a tridiagonal matrix - nonzero elements are only on the diagonal and on both subdiagonals.
 For general matrices a similar orthogonal transformation exists, such $T$ is a Hessenberg matrix.
-If $Av_i = \lambda_i$  then
+
+If $Av_i = \lambda_i v_i$  then
 \begin{align}
 	\lambda_i Q^T v_i & = Q^T A v_i = Q^T A Q Q^{-1} v_i = (Q^T A Q) Q^T v_i \\
 	(Q^T A Q) Q^T v_i & = T Q^T v_i, \: {\rm therefore}                      \\
 	T w_i             & = \lambda_i w_i, \:{\rm where}                       \\
-	w_i               & = Q^Tv_i.
+	w_i               & = Q^Tv_i\\
+	(Q^T)^{-1} w_i &= (Q^T)^{-1} Q^T v_i \\
+	v_i &= Q w_i. 
 \end{align}
 
 There exist efficient numerical algorithms for finding eigenvectors and eigenvalue of triagonal or Hessenberg $T$ matrices.
@@ -178,7 +181,7 @@ The problem has additional constraints
 We can now relax the problem and constraint the values of $s$ on a surface of a hyper-sphere with a diameter of $\sqrt{n}$. This relaxes the problem from restricted optimization to constrained optimization.
 Such problem can be solved using Lagrangian optimization method
 \begin{align}
-	\pdv{}{s_i} \left[\sum_{jk} L_{jk} s_j s_k + \alpha \left(n - \sum_j s^2\right) + 2 \beta\left(n_1 - n_2 - \sum_j s_j\right) \right] = 0, \: \forall i
+	\pdv{}{s_i} \left[\sum_{jk} L_{jk} s_j s_k + \alpha \left(n - \sum_j s^2\right) + 2 \beta\left(n_1 - n_2 - \sum_j s_j\right) \right] = 0, \: \forall i\\
 	2 \sum_j L_{ij}s_j - 2 \alpha s_i - 2 \beta & = 0  \\
 	L s - \alpha s - \beta \bm{1}               & = 0.
 \end{align}

@@ -15,12 +15,6 @@ The Z-matrix has all off-diagonal elements non-positive, $Z_{ij} \leq 0, \: i \n
 $-Z$ is Metzler.
 
 A M-matrix is a Z-matrix with all eigenvalues having non-negative real parts.
-% \begin{itemize}
-% 	\item A Z-matrix $E = sI - A$ is singular M-matrix if all its principal minors are nonnegative
-% 	\item A Z-matrix $E = sI - A$ is nonsingular M-matrix if all its principal minors are positive
-% 	\item If $E$ is a singular M-matrix, then $s\geq \rho(A)$ and $-E$ is a Metzler matrix
-% 	\item $\dots$
-% \end{itemize}
 
 
 \section{Explain how the geometric multiplicity of eigenvalues differ from the algebraic one.}
@@ -78,7 +72,7 @@ Then it is true that
 \end{align}
 
 \section{Define a balanced graph.}
-A balanced graph is a graph where the indegree and outdegree of each vertex are equal. An example of a balanced graph is an undirected graph.
+A balanced graph is a graph where the in-degree and out-degree of each vertex are equal. An example of a balanced graph is an undirected graph.
 
 \section{Define a strongly connected graph.}
 A strongly connected graph is a graph where there exists a directed path between any 2 vertices of the graph.
@@ -112,12 +106,12 @@ Degree centrality is a measure of the graph.
 \begin{definition}{Katz centrality}{}
 	Generalization of the eigenvector centrality
 	\begin{align}
-		x_i & = \alpha \sum_j A_{ij} x_j +\beta,
+		x_i    & = \alpha \sum_j A_{ij} x_j +\beta \\
+		\bm{x} & = \alpha A \bm{x} + \bm{1}\beta,
 	\end{align}
 	which allows to calculate the centrality in a non-iterative manner
 	\begin{align}
-		x           & = \left(I - \alpha A\right)^{-1}\bar{\beta} \\
-		\bar{\beta} & = \bm{1}\beta.
+		\bm{x} & = \left(I - \alpha A\right)^{-1}\bm{1} \beta.
 	\end{align}
 \end{definition}
 \end{document}

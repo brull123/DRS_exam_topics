@@ -3,7 +3,8 @@
 \begin{document}
 \lecture{Lecture 6}
 \section{Define transitivity of a network in any of equivalent ways.}
-Transitivity measures how strongly a network tends to form triangles - weather "a fried of my friend is also my friend".
+Transitivity measures how strongly a network tends to form triangles - weather "a friend of my friend is also my friend".
+It is a global measure, which says that if a vertex is connected to two neighbors what is the probability that these two neighbors are also connected.
 \begin{definition}{Transitivity}{}
 	Transitivity is a global measure defined using any of the following formulas
 	\begin{align}
@@ -17,10 +18,19 @@ Transitivity measures how strongly a network tends to form triangles - weather "
 	\begin{align}
 		C & = \frac{\text{number of triangles $\times$ 3}}{\text{number of connected triples}} \\
 	\end{align}
-	A single triangle can be written as 3 connected triples, one centered at each node. The formula is then: how many closed triples among all triples.
+	A connected triple is an unordered path of length 2 so $A-B-C$ is the same as $C-B-A$, but $B-A-C$ is different.\\
+	A single triangle can be written as 3 connected triples, one centered at each node:
+	\begin{itemize}
+		\item $A-B-C$
+		\item $A-C-B$
+		\item $B-A-C$.
+	\end{itemize}
+	A triangle is essentially a closed triple.
+	The formula is then: how many closed triples among all triples.
 \end{definition}
 
 \section{Define local clustering.}
+Local clustering is a local variant of the transitivity.
 \begin{align}
 	C_i & = \frac{\text{number of pairs of neighbors of vertex} \: i \:  \text{that are connected}}{\text{number of pairs of neighbors of vertex}\:i}
 \end{align}
@@ -38,11 +48,21 @@ Transitivity measures how strongly a network tends to form triangles - weather "
 
 \section{Define structural balance for networks with signed edges. Show that structurally balanced network is certainly clusterable (Harrary's theorem).}
 Signed edges carry a positive or negative sign.\\
-A graph is structurally balanced if all loops in the graph have even number of negative edges.\\
-A signed network is clusterable if it is possible to clearly partition it into two subsets of vertices such that all edges between vertices within each subset are positive while all the edges between the two subsets are negative.\\
-Clustering algorithm - color the vertices along paths using 2 colors, change the color when traversing a negative edge.
-After finishing the loop, the color changed even times - so it has changed to the original color of the first vertex in the loop.
+\begin{definition}{Structurally balanced graph}{}
+	A graph is structurally balanced if all loops in the graph have even number of negative edges.
+\end{definition}
+\begin{definition}{Cluesterable network}{}
+	A signed network is clusterable if it is possible to clearly partition it into two subsets of vertices such that all edges between vertices within each subset are positive while all the edges between the two subsets are negative.
+\end{definition}
+\begin{theorem}{Harrary's therorem}{}
+	A structurally balanced network is certainly clusterable.
 
+	\textbf{Proof:}\\
+	Clustering algorithm - color the vertices along paths using 2 colors, change the color when traversing a negative edge.
+	After finishing the loop, the color changed even times - so it has changed to the original color of the first vertex in the loop.
+\end{theorem}
+
+\pagebreak
 \section{Show by counterexample that a clusterable network need not be structurally balanced.}
 A triangle with every edge negative. Each vertex is a cluster of 1 node. There are 3 clusters.
 \begin{notebox}
@@ -56,6 +76,7 @@ A measure defined between two vertices. There are two types of similarity
 	\item Structural equivalence
 	\item Regular equivalence
 \end{itemize}
+The notion of similarity is crucial for hierarchical clustering.
 
 \section{Define structural and regular equivalence and explain the differences of them.}
 \subsection{Structural equivalence}
@@ -69,10 +90,10 @@ Gives the number of length 2 paths between the ordered pair of nodes.
 \subsection{Regular equivalence}
 Outcome of an iterative process
 \begin{align}
-	\sigma_{ij} & = \alpha \sum_{kl} A_{ik}A_{jl}\sigma_{kl} = \alpha \sum_{kl}A_{ik}\sigma_{kl}A_{lj}^T \\
-	\sigma      & = \alpha A \sigma A^T
+	\sigma'_{ij} & = \alpha \sum_{kl} A_{ik}A_{jl}\sigma_{kl} = \alpha \sum_{kl}A_{ik}\sigma_{kl}A_{lj}^T \\
+	\sigma'      & = \alpha A \sigma A^T
 \end{align}
-
+\pagebreak
 \section{Define homophily and assortative mixing in networks.}
 \subsection{Homophily}
 A global property based on similarity
@@ -86,15 +107,16 @@ Defines a finite number of distinct classes $c_i$.
 
 We count the edges between the nodes of the same class
 \begin{align}
-	\sum_{i,j} \delta(c_i, c_j) = \sum_{i,j} A_{ij}\delta(x_i, c_j)
+	% \sum_{i,j} \delta(c_i, c_j) = 
+	\frac{1}{2}\sum_{i,j} A_{ij}\delta(c_i, c_j)
 \end{align}
 This number is compared to the number expected if connections were made at random
 \begin{align}
-	\frac{1}{2} \sum_{i,j} \delta(c_i, c_j).
+	\frac{1}{2} \sum_{i,j} \frac{d_i d_j}{2m}\delta(c_i, c_j).
 \end{align}
 The difference is
 \begin{align}
-	\frac{1}{2}\sum_{i,j} A_{ij}\delta(x_i, c_j) - \frac{1}{2} \sum_{i,j} \frac{d_i d_j}{2m} \delta (c_i, c_j).
+	\frac{1}{2}\sum_{i,j} A_{ij}\delta(c_i, c_j) - \frac{1}{2} \sum_{i,j} \frac{d_i d_j}{2m} \delta (c_i, c_j).
 \end{align}
 The modularity is a global property defined as
 \begin{align}
@@ -121,7 +143,7 @@ The mean value is
 The covariance is defined as
 \begin{align}
 	{\rm cov}(x_i, x_j) & = \frac{\sum_{i,j}A_{ij}(x_i - \mu)(x_j - \mu)}{\sum_{i,j}A_{ij}}        \\
-	{\rm cov}(x_i, x_j) & = \frac{1}{2m} \sum{i,j}\left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j.
+	{\rm cov}(x_i, x_j) & = \frac{1}{2m} \sum_{i,j}\left(A_{ij} - \frac{d_i d_j}{2m}\right)x_i x_j.
 \end{align}
 
 \subsection{Assortative mixing}
